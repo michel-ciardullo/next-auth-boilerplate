@@ -37,7 +37,6 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    // Ajouter user.id dans le JWT
     async jwt({ token, user }) {
       if (user) {
         token.userId = user.id;
@@ -45,10 +44,9 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // Ajouter userId dans la session côté client
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.userId = token.userId!;
+        session.user.id = token.userId!;
       }
       return session;
     },
