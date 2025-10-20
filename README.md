@@ -1,8 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧱 Next Auth Boilerplate
 
-## Getting Started
+This is a modern **Next.js + NextAuth.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects — with built-in support for **dark mode**, **TailwindCSS**, and a clean modular architecture.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+* ⚡️ **Next.js 15+** with App Router
+* 🔐 **NextAuth.js** authentication (Credentials provider setup)
+* 🎨 **TailwindCSS** with light/dark theme
+* 🤩 Modular UI Components (`Navbar`, `Header`, `Main`, `Input`, etc.)
+* 🤯 Protected routes and session-based navigation
+* 🤀 Ready-to-extend structure for dashboards, profiles, and reports
+
+---
+
+## 🛠️ Getting Started
+
+First, clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/michel-ciardullo/next-auth-boilerplate.git
+cd next-auth-boilerplate
+npm install
+```
+
+Then, start the development server:
 
 ```bash
 npm run dev
@@ -14,23 +37,100 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Environment Setup
 
-## Learn More
+Create a `.env.local` file in the project root and configure the following variables:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> 💡 You can generate a secure secret with:
+>
+> ```bash
+> openssl rand -base64 32
+> ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🗂️ Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+next-auth-boilerplate/
+├── app/
+│   ├── api/
+│   │   └── auth/
+│   │   └── [...nextauth]/route.ts
+│   ├── auth/
+│   │   ├── error/
+│   │   ├── login/
+│   │   └── register/
+│   ├── dashboard/
+│   ├── page.tsx
+│   └── layout.tsx
+├── components/
+│   ├── ui
+│   ├── navbar
+│   ├── header
+│   └── main
+├── utils/
+│   └── functions.ts
+└── README.md
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🔐 Authentication Flow
+
+1. User signs in via `/auth/login` using email and password.
+2. The credentials are validated through the **NextAuth Credentials Provider**.
+3. On success, the user is redirected to `/dashboard`.
+4. Session state is managed globally through `SessionProvider`.
+5. Navbar automatically adapts — showing user info or login/register links depending on session.
+
+---
+
+## 💻 Development Notes
+
+* Uses `useSession()` hook (NextAuth) with `<SessionProvider>`
+* Fully compatible with server and client components
+* Light/dark mode automatically adapts using Tailwind classes
+* Example routes:
+
+  * `/` → Home (public)
+  * `/auth/login` → Sign In
+  * `/auth/register` → Sign Up
+  * `/dashboard` → Protected user area
+
+---
+
+## 📦 Deployment
+
+You can deploy easily to [**Vercel**](https://vercel.com) (recommended):
+
+1. Push your code to GitHub
+2. Import the repo on [Vercel](https://vercel.com/new)
+3. Add your environment variables (`NEXTAUTH_URL`, `NEXTAUTH_SECRET`)
+4. Deploy 🚀
+
+Read more in the [Next.js Deployment Documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+
+---
+
+## 🧠 Learn More
+
+* [Next.js Documentation](https://nextjs.org/docs)
+* [NextAuth.js Documentation](https://next-auth.js.org/)
+* [TailwindCSS Docs](https://tailwindcss.com/docs)
+
+---
+
+## 🧑‍💻 Author
+
+Created with ❤️ by michel-ciardullo
+Feel free to contribute, fork, or open issues to improve the boilerplate!
