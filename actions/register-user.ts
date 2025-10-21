@@ -6,7 +6,7 @@ import { z, treeifyError } from "zod";
 import prisma from "@/lib/prisma";
 
 // Define Zod schema
-const registerSchema = z
+const schema = z
   .object({
     name: z.string().min(3, "Name is required"),
     email: z.email("Invalid email address"),
@@ -37,7 +37,7 @@ export default async function registerUser(currentState: any, formData: FormData
   const confirmPassword = formData.get("confirmPassword") as string;
 
   // Zod validation
-  const validatedFields = await registerSchema.safeParseAsync({ name, email, password, confirmPassword });
+  const validatedFields = await schema.safeParseAsync({ name, email, password, confirmPassword });
 
   // Return early if the form data is invalid
   if (!validatedFields.success) {

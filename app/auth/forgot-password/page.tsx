@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import forgotPassword from "@/actions/auth/forgot-password";
+import forgotPassword from "@/actions/forgot-password";
 import Input from "@/components/ui/form/input";
 import Label from "@/components/ui/form/label";
 

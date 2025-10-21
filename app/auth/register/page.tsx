@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import registerUser from "@/actions/auth/register-user";
+import registerUser from "@/actions/register-user";
 import Input from "@/components/ui/form/input";
 import Label from "@/components/ui/form/label";
 

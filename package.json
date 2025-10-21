@@ -7,9 +7,6 @@
     "build": "next build --turbopack",
     "start": "next start"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
