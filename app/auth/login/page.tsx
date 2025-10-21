@@ -106,7 +106,7 @@ export default function Login() {
               <div className="text-sm">
                 {/* 🔑 Forgot Password Link */}
                 <Link
-                  href="/auth/forgot-password"
+                  href="/auth/forgot"
                   className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   Forgot password?

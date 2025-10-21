@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
   const token = searchParams.get("token");
 
   useEffect(() => {
-    // Si aucun token n’est présent dans l’URL
+    // If no token is present in the URL
     if (!token) {
       alert("Invalid or missing token");
     }

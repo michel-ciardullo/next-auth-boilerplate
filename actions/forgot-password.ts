@@ -1,8 +1,11 @@
 "use server";
 
-import { z, treeifyError } from "zod";
+import { headers } from "next/headers";
 import { randomBytes } from "crypto";
+import { z, treeifyError } from "zod";
+
 import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/email";
 
 let user: { id: number } | null = null;
 
@@ -46,7 +49,7 @@ export default async function forgotPassword(currentState: any, formData: FormDa
   // Add 1 hour to current time
   const expires = new Date(Date.now() + 60 * 60 * 1000); // 60 min * 60 sec * 1000 ms
 
-  const passwordResets = await prisma.passwordReset.findMany();
+  await prisma.passwordReset.deleteMany();
 
   await prisma.passwordReset.create({
     data: {
@@ -56,8 +59,16 @@ export default async function forgotPassword(currentState: any, formData: FormDa
     },
   });
 
-  // TODO: send email with reset link
-  console.log(`Reset link: https://your-app.com/auth/reset-password?token=${token}`);
+  const origin = (await headers()).get('origin')
+
+  const resetUrl = `${origin}/auth/reset?token=${token}`;
+  await sendEmail({
+    to: email,
+    subject: "Reset your password",
+    html: `<p>Hello,</p>
+           <p>Click the link below to reset your password:</p>
+           <a href="${resetUrl}">${resetUrl}</a>`,
+  });
 
   return {
     success: true,

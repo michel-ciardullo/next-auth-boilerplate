@@ -1,9 +1,13 @@
 "use server";
 
-import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z, treeifyError } from "zod";
+import bcrypt from "bcryptjs";
+
 import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/email";
 
 // Define Zod schema
 const schema = z
@@ -50,11 +54,29 @@ export default async function registerUser(currentState: any, formData: FormData
     };
   }
 
-  // --- Create user ---
+  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // Generate verification token
+  const token = randomBytes(32).toString("hex");
+
   await prisma.user.create({
-    data: { name, email, password: hashedPassword },
+    data: { name, email, password: hashedPassword, emailVerificationToken: token },
+  });
+
+  const origin = (await headers()).get('origin')
+
+  // send verification email
+  console.log(`Verify your email: ${origin}/auth/verify?token=${token}`);
+
+  // Envoyer mail de vérification
+  const verifyUrl = `${origin}/auth/verify?token=${token}`;
+  await sendEmail({
+    to: email,
+    subject: "Verify your email",
+    html: `<p>Hello ${name},</p>
+           <p>Click the link below to verify your email:</p>
+           <a href="${verifyUrl}">${verifyUrl}</a>`,
   });
 
   // Redirect to login page
