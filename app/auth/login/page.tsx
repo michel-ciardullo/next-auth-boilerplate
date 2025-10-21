@@ -13,17 +13,17 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [pending, setPending] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPending(true);
     setErrors({});
 
-    // Validation rapide côté client
+    // Basic client-side validation
     const newErrors: typeof errors = {};
-    if (!email.includes("@")) newErrors.email = "Email invalide";
-    if (!password || password.length < 6) newErrors.password = "Mot de passe invalide";
+    if (!email.includes("@")) newErrors.email = "Invalid email address";
+    if (!password || password.length < 6) newErrors.password = "Invalid password";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -31,21 +31,35 @@ export default function Login() {
       return;
     }
 
-    // Appel NextAuth credentials
+    // Call NextAuth credentials provider
     const res = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
 
-    console.log(res)
-
     setPending(false);
 
     if (res?.error) {
-      setErrors({ general: res.error });
+      const newErrors: typeof errors = {};
+
+      switch (res.error) {
+        case "INVALID_EMAIL":
+          newErrors.email = "No user found with this email";
+          break;
+        case "INVALID_PASSWORD":
+          newErrors.password = "Incorrect password";
+          break;
+        case "MISSING_CREDENTIALS":
+          newErrors.general = "Please enter your credentials";
+          break;
+        default:
+          newErrors.general = "An unexpected error occurred. Please try again.";
+      }
+
+      setErrors(newErrors);
     } else {
-      router.push('/dashboard') // redirection après succès
+      router.push("/dashboard"); // Redirect after successful sign in
     }
   };
 
@@ -90,12 +104,13 @@ export default function Login() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <div className="text-sm">
-                <a
-                  href="#"
+                {/* 🔑 Forgot Password Link */}
+                <Link
+                  href="/auth/forgot-password"
                   className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="mt-2">
@@ -126,13 +141,14 @@ export default function Login() {
           </button>
         </form>
 
+        {/* 📝 Sign Up Link */}
         <p className="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">
-          Not a member?{" "}
+          Don’t have an account?{" "}
           <Link
             href="/auth/register"
             className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
           >
-            Start a 14 day free trial
+            Sign up now
           </Link>
         </p>
       </div>

@@ -1,9 +1,10 @@
 'use server'
 
+import Link from 'next/link'
+
 import Navbar from '@/components/navbar'
 import Header from '@/components/header'
 import Main from '@/components/main'
-import Link from 'next/link'
 
 export default async function Home() {
   return (

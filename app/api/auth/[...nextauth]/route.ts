@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import prisma from '@/lib/prisma'
+import bcrypt from "bcryptjs"
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -17,17 +19,31 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("MISSING_CREDENTIALS")
+        }
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null
+        // 🔍 Recherche de l'utilisateur dans la base de données
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        })
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        if (!user) {
+          throw new Error("INVALID_EMAIL")
+        }
+
+        // 🧠 Vérification du mot de passe (comparaison hash bcrypt)
+        const isValidPassword = await bcrypt.compare(credentials.password, user.password)
+
+        if (!isValidPassword) {
+          throw new Error("INVALID_PASSWORD")
+        }
+
+        // ✅ Retour de l'utilisateur si la connexion est valide
+        return {
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
         }
       }
     }),
@@ -52,7 +68,11 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    error: '/auth/error'
+    newUser: '/auth/register',
+    signIn: '/auth/login',
+    signOut: '/auth/logout',
+    verifyRequest: '/auth/verify-request',
+    error: '/auth/error',
   }
 }
 
