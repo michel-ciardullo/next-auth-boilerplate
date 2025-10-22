@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <div className="min-h-full">
       <Navbar />
-      <Header>Welcome Home</Header>
+      <Header>Home</Header>
 
       <Main>
         <section className="max-w-4xl mx-auto text-center py-16 px-6">
