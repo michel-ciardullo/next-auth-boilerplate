@@ -78,6 +78,7 @@ export default function Login() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-6">
+
           {errors.general && (
             <div className="text-red-600 dark:text-red-400 text-sm">{errors.general}</div>
           )}
