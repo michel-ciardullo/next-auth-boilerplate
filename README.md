@@ -166,4 +166,5 @@ Read more in the [Next.js Deployment Documentation](https://nextjs.org/docs/app/
 ## 🧑‍💻 Author
 
 Created with ❤️ by michel-ciardullo
+
 Feel free to contribute, fork, or open issues to improve the boilerplate!
