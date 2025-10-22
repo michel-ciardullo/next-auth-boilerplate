@@ -1,17 +1,23 @@
-# 🧱 Next Auth Boilerplate
+# 🚀 Next Auth Boilerplate
 
-This is a modern **Next.js + NextAuth.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects — with built-in support for **dark mode**, **TailwindCSS**, and a clean modular architecture.
+This is a modern **Next.js + NextAuth.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects. It features built-in support for **dark mode**, **TailwindCSS**, a clean modular architecture, and **a real-world database integration**.
 
 ---
 
-## 🚀 Features
+## 💎 Key Features & Tech Stack
 
 * ⚡️ **Next.js 15+** with App Router
-* 🔐 **NextAuth.js** authentication (Credentials provider setup)
+* 🔐 **NextAuth.js** Authentication
+
+  * **Credentials Provider** (Email/Password)
+* 💾 **Prisma ORM** for database abstraction
+* 🐘 **PostgreSQL (via Prisma Accelerate)** for persistence
+* ✉️ **Email System** (Forgot & Reset Password) using Nodemailer
 * 🎨 **TailwindCSS** with light/dark theme
 * 🤩 Modular UI Components (`Navbar`, `Header`, `Main`, `Input`, etc.)
 * 🤯 Protected routes and session-based navigation
-* 🤀 Ready-to-extend structure for dashboards, profiles, and reports
+* ✅ **Server Actions** for form handling (register, login, forgot/reset password, verification)
+* 🔍 **Form validation** using Zod
 
 ---
 
@@ -25,7 +31,17 @@ cd next-auth-boilerplate
 npm install
 ```
 
-Then, start the development server:
+### 1. Database Setup (Prisma)
+
+Before running the app, apply the database schema:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+> ✅ The schema includes `User` and `PasswordReset` models to support authentication and password recovery flows.
+
+### 2. Start the Development Server
 
 ```bash
 npm run dev
@@ -33,8 +49,6 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
@@ -48,6 +62,13 @@ Create a `.env.local` file in the project root and configure the following varia
 ```env
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key
+
+# Email setup for password recovery
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@example.com
+EMAIL_PASS=your-email-password
+EMAIL_FROM="Your App <no-reply@example.com>"
 ```
 
 > 💡 You can generate a secure secret with:
@@ -58,64 +79,73 @@ NEXTAUTH_SECRET=your-secret-key
 
 ---
 
-## 🗂️ Project Structure
+## 🔐 Authentication Flow
 
-```
-next-auth-boilerplate/
-├── app/
-│   ├── api/
-│   │   └── auth/
-│   │   └── [...nextauth]/route.ts
-│   ├── auth/
-│   │   ├── error/
-│   │   ├── login/
-│   │   └── register/
-│   ├── dashboard/
-│   ├── page.tsx
-│   └── layout.tsx
-├── components/
-│   ├── ui
-│   ├── navbar
-│   ├── header
-│   └── main
-├── utils/
-│   └── functions.ts
-└── README.md
-```
+This boilerplate supports **full authentication & account management**:
+
+1. **Register** (`/auth/register`):
+
+   * Users can create accounts.
+   * Fields are validated via **Zod**.
+   * Errors show inline next to each field.
+   * Passwords are hashed with **bcrypt**.
+
+2. **Login** (`/auth/login`):
+
+   * Credentials Provider.
+   * Server-side validation and session creation via **NextAuth**.
+
+3. **Forgot Password** (`/auth/forgot`):
+
+   * Users can request a password reset link.
+   * Emails are sent via **Nodemailer**.
+   * Reset tokens stored in `PasswordReset` table with expiry.
+
+4. **Reset Password** (`/auth/reset`):
+
+   * Validates token and expiry.
+   * Allows updating the password securely.
+   * Redirects to login after success.
+
+5. **Email Verification** (`/auth/verify`):
+
+   * Users receive a verification link on registration.
+   * Server Action verifies token and activates the account.
+   * Invalid/expired tokens redirect to an error page.
+
+6. **Session Management**:
+
+   * `useSession()` hook and `<SessionProvider>` manage global session state.
+   * Navbar adapts automatically (shows login/register or user info).
 
 ---
 
-## 🔐 Authentication Flow
+## 📝 Form Handling & Validation
 
-1. User signs in via `/auth/login` using email and password.
-2. The credentials are validated through the **NextAuth Credentials Provider**.
-3. On success, the user is redirected to `/dashboard`.
-4. Session state is managed globally through `SessionProvider`.
-5. Navbar automatically adapts — showing user info or login/register links depending on session.
+* **Server Actions** are used for all forms (`register`, `forgot/reset password`, `verify`).
+* **Zod schemas** validate inputs before hitting the database.
+* Inline error display for all fields.
+* Preserves valid field values on validation errors.
 
 ---
 
 ## 💻 Development Notes
 
-* Uses `useSession()` hook (NextAuth) with `<SessionProvider>`
-* Fully compatible with server and client components
-* Light/dark mode automatically adapts using Tailwind classes
-* Example routes:
-
-  * `/` → Home (public)
-  * `/auth/login` → Sign In
-  * `/auth/register` → Sign Up
-  * `/dashboard` → Protected user area
+* Modular UI and server actions make adding new auth flows simple.
+* Prisma abstracts all database interactions.
+* Nodemailer setup allows real email sending in dev and production.
+* TailwindCSS adapts automatically to dark/light themes.
+* Protect routes via session checks (`/dashboard`).
 
 ---
 
 ## 📦 Deployment
 
-You can deploy easily to [**Vercel**](https://vercel.com) (recommended):
+Recommended on [**Vercel**](https://vercel.com):
 
 1. Push your code to GitHub
 2. Import the repo on [Vercel](https://vercel.com/new)
-3. Add your environment variables (`NEXTAUTH_URL`, `NEXTAUTH_SECRET`)
+3. Set environment variables (`NEXTAUTH_URL`, `NEXTAUTH_SECRET`, email configs)
 4. Deploy 🚀
 
 Read more in the [Next.js Deployment Documentation](https://nextjs.org/docs/app/building-your-application/deploying).
@@ -126,7 +156,10 @@ Read more in the [Next.js Deployment Documentation](https://nextjs.org/docs/app/
 
 * [Next.js Documentation](https://nextjs.org/docs)
 * [NextAuth.js Documentation](https://next-auth.js.org/)
-* [TailwindCSS Docs](https://tailwindcss.com/docs)
+* [TailwindCSS Documentation](https://tailwindcss.com/docs)
+* [Prisma Documentation](https://www.prisma.io/docs)
+* [Zod Documentation](https://zod.dev)
+* [Nodemailer Documentation](https://nodemailer.com)
 
 ---
 
