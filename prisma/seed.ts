@@ -8,13 +8,8 @@ export async function main() {
 
   const userData: Prisma.UserCreateInput[] = [
     {
-      name: "Jean Dupont",
-      email: "jean.dupont@example.com",
-      password: password,
-    },
-    {
-      name: "Marie Martin",
-      email: "marie.martin@example.com",
+      name: "toto",
+      email: "toto@local.dev",
       password: password,
     },
   ];
