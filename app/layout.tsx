@@ -25,7 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full bg-white dark:bg-gray-900">
+    <html lang="en" className="h-full bg-gray-100 dark:bg-gray-900 dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
