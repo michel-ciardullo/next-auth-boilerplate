@@ -57,7 +57,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## ⚙️ Environment Setup
 
-Create a `.env.local` file in the project root and configure the following variables:
+Create a `.env` file in the project root and configure the following variables:
 
 ```env
 NEXTAUTH_URL=http://localhost:3000
