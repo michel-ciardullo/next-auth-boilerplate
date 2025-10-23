@@ -31,7 +31,6 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
             <div className="col-span-full">
-              {/* Affichage message serveur si erreur */}
               {state?.errors?.server?.errors && state.errors.server.errors.length > 0 && (
                 <span className="text-sm/6 text-red-600 dark:text-red-400 mr-auto">
                   {state.errors.server.errors[0]}

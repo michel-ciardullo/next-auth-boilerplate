@@ -23,36 +23,23 @@ export const authOptions: NextAuthOptions = {
           throw new Error("MISSING_CREDENTIALS")
         }
 
-        // 🔍 Recherche de l'utilisateur dans la base de données
+        // 🔍 Search for the user in the database
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         })
-        
-        /*
-        {
-          id: 2,
-          name: 'toto',
-          email: 'toto@local.dev',
-          password: '...',
-          emailVerified: false,
-          emailVerificationToken: null,
-          createdAt: 2025-10-22T00:19:55.618Z,
-          updatedAt: 2025-10-22T00:19:55.618Z
-        }
-        */
 
         if (!user) {
           throw new Error("INVALID_EMAIL")
         }
 
-        // 🧠 Vérification du mot de passe (comparaison hash bcrypt)
+        // 🧠 Password verification (bcrypt hash comparison)
         const isValidPassword = await bcrypt.compare(credentials.password, user.password)
 
         if (!isValidPassword) {
           throw new Error("INVALID_PASSWORD")
         }
 
-        // ✅ Retour de l'utilisateur si la connexion est valide
+        // ✅ Return the user if the connection is valid
         return {
           id: user.id.toString(),
           name: user.name,
@@ -69,7 +56,7 @@ export const authOptions: NextAuthOptions = {
     // You can still force a JWT session by explicitly defining `"jwt"`.
     // When using `"database"`, the session cookie will only contain a `sessionToken` value,
     // which is used to look up the session in the database.
-    strategy: "jwt", // or 'database'
+    strategy: "jwt", // 'jwt' or 'database'
 
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 30 * 24 * 60 * 60, // 30 days

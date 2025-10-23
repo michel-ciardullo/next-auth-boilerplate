@@ -30,7 +30,7 @@ export default async function updateProfile(currentState: any, formData: FormDat
   }
 
   try {
-    // Récupère l'utilisateur connecté
+    // Retrieves the logged-in user
     const userId = parseInt(currentState.userId as string, 10)
 
     await prisma.user.update({

@@ -69,7 +69,6 @@ export default async function registerUser(currentState: any, formData: FormData
   // send verification email
   console.log(`Verify your email: ${origin}/auth/verify?token=${token}`);
 
-  // Envoyer mail de vérification
   const verifyUrl = `${origin}/auth/verify?token=${token}`;
   await sendEmail({
     to: email,
