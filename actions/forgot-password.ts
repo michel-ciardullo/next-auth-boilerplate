@@ -1,13 +1,15 @@
 "use server";
 
 import { headers } from "next/headers";
+import { User } from "next-auth";
+
 import { randomBytes } from "crypto";
 import { z, treeifyError } from "zod";
 
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
 
-let user: { id: number } | null = null;
+let user: User | null = null;
 
 // Define Zod schema
 const schema = z
@@ -49,7 +51,11 @@ export default async function forgotPassword(currentState: any, formData: FormDa
   // Add 1 hour to current time
   const expires = new Date(Date.now() + 60 * 60 * 1000); // 60 min * 60 sec * 1000 ms
 
-  await prisma.passwordReset.deleteMany();
+  await prisma.passwordReset.deleteMany({
+    where: {
+      userId: user!.id,
+    }
+  });
 
   await prisma.passwordReset.create({
     data: {

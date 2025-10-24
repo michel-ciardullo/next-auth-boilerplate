@@ -11,6 +11,7 @@ export async function main() {
       name: "toto",
       email: "toto@local.dev",
       password: password,
+      emailVerifiedAt: new Date()
     },
   ];
 

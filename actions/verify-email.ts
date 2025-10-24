@@ -23,7 +23,10 @@ export default async function verifyEmail(currentState: any, formData: FormData)
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { emailVerified: true, emailVerificationToken: null },
+    data: {
+      emailVerifiedAt: new Date(),
+      emailVerificationToken: null
+    },
   });
 
   return { success: true };
