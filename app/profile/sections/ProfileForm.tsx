@@ -2,14 +2,14 @@
 
 import { useActionState, useEffect } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
+
 import { User } from 'next-auth'
+import { useSession } from 'next-auth/react'
 
 import Label from '@/components/ui/form/label'
 import Input from '@/components/ui/form/input'
 
 import updateProfile from '@/actions/update-profile'
-import { classNames } from '@/utils/functions'
-import { useSession } from 'next-auth/react'
 
 interface ProfileFormProps {
   user: User
@@ -40,10 +40,9 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       </div>
 
       <form action={formAction} className="bg-white dark:bg-gray-800 md:rounded-xl ring ring-gray-900/5 md:col-span-2 md:mr-6">
-        <input type="hidden" name="userId" />
 
         <div className="px-4 py-6 sm:p-8">
-          <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
             {state?.errors?.server?.errors && state.errors.server.errors.length > 0 && (
               <div className="col-span-full">
