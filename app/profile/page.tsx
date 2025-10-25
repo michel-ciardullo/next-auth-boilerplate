@@ -27,7 +27,7 @@ export default async function Profile() {
         <UpdatePasswordForm userId={session!.user.id} />
         <TwoFactorForm />
         <BrowserSessions />
-        <DeleteAccountForm />
+        <DeleteAccountForm userId={session!.user.id} />
 
       </main>
     </div>

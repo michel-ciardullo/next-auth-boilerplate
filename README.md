@@ -37,6 +37,7 @@ Before running the app, apply the database schema:
 
 ```bash
 npx prisma migrate dev --name init
+npx prisma db seed
 ```
 
 > ✅ The schema includes `User` and `PasswordReset` models to support authentication and password recovery flows.
