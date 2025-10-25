@@ -77,6 +77,7 @@ export const authOptions: NextAuthOptions = {
         // Note, that `session` can be any arbitrary object, remember to validate it!
         token.name = session.name
         token.email = session.email
+        token.image = session.image
       }
       return token;
     },
@@ -85,6 +86,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.userId!;
         session.user.name = token.name!;
         session.user.email = token.email!;
+        session.user.image = token.image!;
       }
       return session;
     },
