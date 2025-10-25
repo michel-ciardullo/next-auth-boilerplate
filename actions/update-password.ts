@@ -39,7 +39,7 @@ export default async function updatePassword(currentState: any, formData: FormDa
   try {
     // ✅ Get user from DB
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(currentState.userId) },
+      where: { id: currentState.userId },
       select: { password: true },
     });
 
@@ -72,7 +72,7 @@ export default async function updatePassword(currentState: any, formData: FormDa
 
     // 💾 Update user password
     await prisma.user.update({
-      where: { id: parseInt(currentState.userId) },
+      where: { id: currentState.userId },
       data: { password: hashedPassword },
     });
 

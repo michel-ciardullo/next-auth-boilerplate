@@ -43,7 +43,7 @@ export default function TwoFactorForm() {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 dark:border-white/10 px-4 py-4 md:px-8">
+        <div className="bg-gray-50 dark:bg-gray-700/25 flex items-center justify-end gap-x-6 border-t border-gray-900/10 dark:border-white/10 px-4 py-4 md:px-8">
           <button type="button" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
             Cancel
           </button>

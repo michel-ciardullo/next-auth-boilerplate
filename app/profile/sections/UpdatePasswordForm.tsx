@@ -30,13 +30,13 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
         <div className="px-4 py-6 sm:p-8">
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-            <div className="col-span-full">
-              {state?.errors?.server?.errors && state.errors.server.errors.length > 0 && (
+            {state?.errors?.server?.errors && state.errors.server.errors.length > 0 && (
+              <div className="col-span-full">
                 <span className="text-sm/6 text-red-600 dark:text-red-400 mr-auto">
                   {state.errors.server.errors[0]}
                 </span>
-              )}
-            </div>
+              </div>
+            )}
 
             <div className="col-span-full">
               <Label htmlFor="currentPassword">Current Password</Label>
@@ -80,14 +80,14 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 dark:border-white/10 px-4 py-4 md:px-8">
+        <div className="bg-gray-50 dark:bg-gray-700/25 flex items-center justify-end gap-x-6 border-t border-gray-900/10 dark:border-white/10 px-4 py-4 md:px-8">
           <button
             type="submit"
             disabled={isPending}
-            className={classNames(
-              'rounded-md bg-indigo-600 dark:bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500',
-              isPending ? "opacity-60 cursor-not-allowed" : ""
-            )}
+            className={`flex justify-center rounded-md bg-indigo-600 dark:bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs 
+              hover:bg-indigo-500 dark:hover:bg-indigo-400 
+              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500
+              ${isPending ? "opacity-60 cursor-not-allowed" : ""}`}
           >
             {isPending ? "Saving..." : "Save"}
           </button>

@@ -30,11 +30,8 @@ export default async function updateProfile(currentState: any, formData: FormDat
   }
 
   try {
-    // Retrieves the logged-in user
-    const userId = parseInt(currentState.userId as string, 10)
-
     await prisma.user.update({
-      where: { id: userId },
+      where: { id: currentState.userId },
       data: {
         name: validatedFields.data.username,
         email: validatedFields.data.email,
@@ -47,6 +44,7 @@ export default async function updateProfile(currentState: any, formData: FormDat
       username,
       email,
       message: "Profile successfully updated",
+      errors: null
     }
   }
   catch (error) {
