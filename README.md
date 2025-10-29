@@ -20,6 +20,18 @@ This is a modern **Next.js** boilerplate designed to help you kickstart secure a
 
 ---
 
+## Demo Pages
+
+| Login page                     | Register page                        | Forgot password                 |
+|--------------------------------|--------------------------------------|---------------------------------|
+| ![Login](./previews/login.png) | ![Register](./previews/register.png) | ![Fogot](./previews/forgot.png) |
+
+| Reset password                 | 404 not found                         | Dashboard                              |
+|--------------------------------|---------------------------------------|----------------------------------------|
+| ![Reset](./previews/reset.png) | ![404](./previews/not-found.png)      | ![Dashboard](./previews/dashboard.png) |
+
+---
+
 ## 🛠️ Getting Started
 
 First, clone the repository and install dependencies:
