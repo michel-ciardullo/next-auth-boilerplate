@@ -60,8 +60,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Create a `.env` file in the project root and configure the following variables:
 
 ```env
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key
+DATABASE_URL=""
+
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key="
 
 # Email setup for password recovery
 EMAIL_HOST=smtp.example.com
