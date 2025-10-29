@@ -1,8 +1,3 @@
-[![GitHub stars](https://img.shields.io/github/stars/michel-ciardullo/next-auth-boilerplate?style=for-the-badge)](https://github.com/michel-ciardullo/next-auth-boilerplate/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/michel-ciardullo/next-auth-boilerplate?style=for-the-badge)](https://github.com/michel-ciardullo/next-auth-boilerplate/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/michel-ciardullo/next-auth-boilerplate?style=for-the-badge)](https://github.com/michel-ciardullo/next-auth-boilerplate/issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://opensource.org/licenses/MIT)
-
 # 🚀 Next Auth Boilerplate
 
 ![Landing](./previews/landing.png)
