@@ -1,67 +1,14 @@
 'use client'
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useActionState } from "react";
 import Link from "next/link";
 
 import Input from "@/components/ui/form/input";
 import Label from "@/components/ui/form/label";
+import { loginAction } from "@/features/auth";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
-  const [pending, setPending] = useState(false);
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setPending(true);
-    setErrors({});
-
-    // Basic client-side validation
-    const newErrors: typeof errors = {};
-    if (!email.includes("@")) newErrors.email = "Invalid email address";
-    if (!password || password.length < 6) newErrors.password = "Invalid password";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setPending(false);
-      return;
-    }
-
-    // Call NextAuth credentials provider
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    setPending(false);
-
-    if (res?.error) {
-      const newErrors: typeof errors = {};
-
-      switch (res.error) {
-        case "INVALID_EMAIL":
-          newErrors.email = "No user found with this email";
-          break;
-        case "INVALID_PASSWORD":
-          newErrors.password = "Incorrect password";
-          break;
-        case "MISSING_CREDENTIALS":
-          newErrors.general = "Please enter your credentials";
-          break;
-        default:
-          newErrors.general = "An unexpected error occurred. Please try again.";
-      }
-
-      setErrors(newErrors);
-    } else {
-      router.push("/dashboard"); // Redirect after successful sign in
-    }
-  };
+  const [state, formAction, pending] = useActionState(loginAction, null)
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -77,11 +24,7 @@ export default function Login() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={handleSubmit} className="space-y-6">
-
-          {errors.general && (
-            <div className="text-red-600 dark:text-red-400 text-sm">{errors.general}</div>
-          )}
+        <form action={formAction} className="space-y-6">
 
           <div>
             <Label htmlFor="email">Email address</Label>
@@ -92,11 +35,10 @@ export default function Login() {
                 type="email"
                 required
                 autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                defaultValue={state?.email}
               />
-              {errors.email && (
-                <small className="text-red-600 dark:text-red-400 block mt-1">{errors.email}</small>
+              {state?.errors?.properties?.email?.errors?.length && (
+                <small className="text-red-600 dark:text-red-400 block mt-1">{state.errors.properties.email.errors[0]}</small>
               )}
             </div>
           </div>
@@ -121,11 +63,9 @@ export default function Login() {
                 type="password"
                 required
                 autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
-              {errors.password && (
-                <small className="text-red-600 dark:text-red-400 block mt-1">{errors.password}</small>
+              {state?.errors?.properties?.password?.errors?.length && (
+                <small className="text-red-600 dark:text-red-400 block mt-1">{state.errors.properties.password.errors[0]}</small>
               )}
             </div>
           </div>

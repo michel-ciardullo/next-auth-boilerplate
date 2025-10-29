@@ -1,22 +1,26 @@
 'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
 import { classNames } from '@/utils/functions'
-import { useSession, signOut } from 'next-auth/react'
-import Link from 'next/link'
+import { useAuth, logoutAction } from '@/features/auth'
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Team', href: '#' },
+  { name: 'Projects', href: '#' },
+  { name: 'Calendar', href: '#' },
+  { name: 'Reports', href: '#' },
 ]
 
 export default function Navbar() {
-  const { data: session, status } = useSession()
-  const user = session?.user
+  const pathname = usePathname()
+
+  const { user, status } = useAuth()
   const loading = status === 'loading'
 
   return (
@@ -40,9 +44,9 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={pathname.startsWith(item.href) ? 'page' : undefined}
                     className={classNames(
-                      item.current
+                      pathname.startsWith(item.href)
                         ? 'bg-gray-900 dark:bg-gray-950/50 text-white'
                         : 'text-gray-300 hover:bg-white/5 hover:text-white',
                       'rounded-md px-3 py-2 text-sm font-medium'
@@ -62,9 +66,8 @@ export default function Navbar() {
               {user && (
                 <button
                   type="button"
-                  className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
+                  className="rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
                 >
-                  <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <BellIcon aria-hidden="true" className="size-6" />
                 </button>
@@ -75,8 +78,7 @@ export default function Navbar() {
                 <div className="text-sm text-gray-400">Loading...</div>
               ) : user ? (
                 <Menu as="div" className="relative ml-3">
-                  <MenuButton className="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                    <span className="absolute -inset-1.5" />
+                  <MenuButton className="flex max-w-xs items-center rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt={user.name || 'User'}
@@ -94,7 +96,7 @@ export default function Navbar() {
                   >
                     <MenuItem>
                       <Link
-                        href="/profile"
+                        href="/dashboard/profile"
                         className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5"
                       >
                         Your profile
@@ -102,7 +104,7 @@ export default function Navbar() {
                     </MenuItem>
                     <MenuItem>
                       <Link
-                        href="/settings"
+                        href="/dashboard/settings"
                         className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5"
                       >
                         Settings
@@ -110,7 +112,7 @@ export default function Navbar() {
                     </MenuItem>
                     <MenuItem>
                       <button
-                        onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                        onClick={() => logoutAction()}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5"
                       >
                         Sign out
@@ -151,15 +153,15 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <DisclosurePanel className="md:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+        <div className="space-y-1 pt-2 pb-3 px-2 sm:px-3">
           {navigation.map((item) => (
             <DisclosureButton
               key={item.name}
               as={Link}
               href={item.href}
-              aria-current={item.current ? 'page' : undefined}
+              aria-current={pathname.startsWith(item.href) ? 'page' : undefined}
               className={classNames(
-                item.current
+                pathname.startsWith(item.href)
                   ? 'bg-gray-900 text-white'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white',
                 'block rounded-md px-3 py-2 text-base font-medium'
@@ -193,14 +195,14 @@ export default function Navbar() {
               <div className="mt-3 space-y-1 px-2">
                 <DisclosureButton
                   as={Link}
-                  href="/profile"
+                  href="/dashboard/profile"
                   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
                 >
                   Your profile
                 </DisclosureButton>
                 <DisclosureButton
                   as="button"
-                  onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                  onClick={() => logoutAction()}
                   className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
                 >
                   Sign out

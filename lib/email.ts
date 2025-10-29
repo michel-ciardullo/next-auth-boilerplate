@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+// import nodemailer from "nodemailer";
 
 interface EmailOptions {
   to: string;
@@ -7,7 +7,7 @@ interface EmailOptions {
 }
 
 // Configure transport
-const transporter = nodemailer.createTransport({
+/*const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT || 587),
   secure: false, // true for 465, false for other ports
@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
   },
-});
+});*/
 
 export async function sendEmail({ to, subject, html }: EmailOptions) {
-  try {
+  /*try {
     const info = await transporter.sendMail({
       from: `"Next Auth" <${process.env.SMTP_FROM}>`,
       to,
@@ -28,5 +28,5 @@ export async function sendEmail({ to, subject, html }: EmailOptions) {
     console.log("Email sent:", info.messageId);
   } catch (err) {
     console.error("Email error:", err);
-  }
+  }*/
 }

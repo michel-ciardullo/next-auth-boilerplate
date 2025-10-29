@@ -1,13 +1,12 @@
 # 🚀 Next Auth Boilerplate
 
-This is a modern **Next.js + NextAuth.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects. It features built-in support for **dark mode**, **TailwindCSS**, a clean modular architecture, and **a real-world database integration**.
+This is a modern **Next.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects. It features built-in support for **dark mode**, **TailwindCSS**, a clean modular architecture, and **a real-world database integration**.
 
 ---
 
 ## 💎 Key Features & Tech Stack
 
 * ⚡️ **Next.js 15+** with App Router
-* 🔐 **NextAuth.js** Authentication
 
   * **Credentials Provider** (Email/Password)
 * 💾 **Prisma ORM** for database abstraction
@@ -94,7 +93,7 @@ This boilerplate supports **full authentication & account management**:
 2. **Login** (`/auth/login`):
 
    * Credentials Provider.
-   * Server-side validation and session creation via **NextAuth**.
+   * Server-side validation and session creation.
 
 3. **Forgot Password** (`/auth/forgot`):
 
@@ -156,7 +155,6 @@ Read more in the [Next.js Deployment Documentation](https://nextjs.org/docs/app/
 ## 🧠 Learn More
 
 * [Next.js Documentation](https://nextjs.org/docs)
-* [NextAuth.js Documentation](https://next-auth.js.org/)
 * [TailwindCSS Documentation](https://tailwindcss.com/docs)
 * [Prisma Documentation](https://www.prisma.io/docs)
 * [Zod Documentation](https://zod.dev)

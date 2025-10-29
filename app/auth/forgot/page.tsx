@@ -3,12 +3,12 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import forgotPassword from "@/actions/forgot-password";
+import { forgetAction } from "@/features/auth";
 import Input from "@/components/ui/form/input";
 import Label from "@/components/ui/form/label";
 
 export default function ForgotPassword() {
-  const [state, formAction, isPending] = useActionState(forgotPassword, null);
+  const [state, formAction, isPending] = useActionState(forgetAction, null);
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

@@ -4,12 +4,12 @@ import { useActionState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-import resetPassword from "@/actions/reset-password";
 import Input from "@/components/ui/form/input";
 import Label from "@/components/ui/form/label";
+import { resetAction } from "@/features/auth";
 
 export default function ResetPasswordPage() {
-  const [state, formAction, isPending] = useActionState(resetPassword, null);
+  const [state, formAction, isPending] = useActionState(resetAction, null);
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 

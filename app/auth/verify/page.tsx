@@ -2,14 +2,14 @@
 
 import { useActionState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import verifyEmail from "@/actions/verify-email";
+import { verifyAction } from "@/features/auth";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token") || "";
 
-  const [state, formAction, isPending] = useActionState(verifyEmail, { token });
+  const [state, formAction, isPending] = useActionState(verifyAction, { token });
 
   const handleRedirect = () => {
     setTimeout(() => router.push("/auth/login"), 2000);
