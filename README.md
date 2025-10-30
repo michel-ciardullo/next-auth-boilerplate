@@ -9,8 +9,6 @@ This is a modern **Next.js** boilerplate designed to help you kickstart secure a
 ## 💎 Key Features & Tech Stack
 
 * ⚡️ **Next.js 15+** with App Router
-
-  * **Credentials Provider** (Email/Password)
 * 💾 **Prisma ORM** for database abstraction
 * 🐘 **PostgreSQL (via Prisma Accelerate)** for persistence
 * ✉️ **Email System** (Forgot & Reset Password) using Nodemailer
@@ -28,9 +26,9 @@ This is a modern **Next.js** boilerplate designed to help you kickstart secure a
 |--------------------------------|--------------------------------------|---------------------------------|
 | ![Login](./previews/login.png) | ![Register](./previews/register.png) | ![Fogot](./previews/forgot.png) |
 
-| Reset password                 | 404 not found                         | Dashboard                              |
-|--------------------------------|---------------------------------------|----------------------------------------|
-| ![Reset](./previews/reset.png) | ![404](./previews/not-found.png)      | ![Dashboard](./previews/dashboard.png) |
+| Reset password                 | 404 not found                    | Dashboard                              |
+|--------------------------------|----------------------------------|----------------------------------------|
+| ![Reset](./previews/reset.png) | ![404](./previews/not-found.png) | ![Dashboard](./previews/dashboard.png) |
 
 ---
 
