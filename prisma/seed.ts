@@ -1,17 +1,18 @@
-import { PrismaClient, Prisma } from "@/app/generated/prisma";
-import bcrypt from "bcryptjs"
+import { PrismaClient, Prisma, Role } from "@/app/generated/prisma";
+import { hashPassword } from "@/features/password";
 
 const prisma = new PrismaClient();
 
 export async function main() {
-  const password = await bcrypt.hash("password", 10)
+  const password = await hashPassword("password")
 
   const userData: Prisma.UserCreateInput[] = [
     {
       name: "toto",
       email: "toto@local.dev",
       password: password,
-      emailVerifiedAt: new Date()
+      emailVerifiedAt: new Date(),
+      role: Role.ADMIN
     },
   ];
 

@@ -11,13 +11,15 @@ export const verifySession = cache(async () => {
   if (!session?.sessionId) {
     return {
       userId: null,
-      sessionId: null
+      sessionId: null,
+      role: null
     }
   }
 
   return {
     userId: session.userId,
-    sessionId: session.sessionId
+    sessionId: session.sessionId,
+    role: session.role
   }
 })
 
@@ -34,5 +36,6 @@ export const getUser = cache(async () => {
     name: data.user.name,
     email: data.user.email,
     image: data.user.image,
+    role: data.user.role,
   };
 })

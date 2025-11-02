@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { classNames } from '@/utils/functions'
 import { useAuth, logoutAction } from '@/features/auth'
+import { Role } from '@/app/generated/prisma'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -94,6 +94,14 @@ export default function Navbar() {
                     transition
                     className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg outline-1 outline-black/5 dark:outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0"
                   >
+                    {user.role === Role.ADMIN && <MenuItem>
+                      <Link
+                        href="/admin"
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5"
+                      >
+                        Admin
+                      </Link>
+                    </MenuItem>}
                     <MenuItem>
                       <Link
                         href="/dashboard/profile"
@@ -195,18 +203,26 @@ export default function Navbar() {
               <div className="mt-3 space-y-1 px-2">
                 <DisclosureButton
                   as={Link}
+                  href="/admin"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                >
+                  Admin
+                </DisclosureButton>
+                <DisclosureButton
+                  as={Link}
                   href="/dashboard/profile"
                   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
                 >
                   Your profile
                 </DisclosureButton>
-                <DisclosureButton
-                  as="button"
-                  onClick={() => logoutAction()}
-                  className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
-                >
-                  Sign out
-                </DisclosureButton>
+                <form action={logoutAction}>
+                  <button
+                    type="submit"
+                    className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                  >
+                    Sign out
+                  </button>
+                </form>
               </div>
             </>
           ) : (

@@ -46,7 +46,7 @@ export default async function loginAction(currentState: any, formData: FormData)
   }
 
   // create jwt with session database.
-  await createSession(user.id)
+  await createSession(user.id, user.role)
 
   // Redirect to profile page
   redirect("/dashboard");

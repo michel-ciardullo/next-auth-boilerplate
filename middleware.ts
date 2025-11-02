@@ -1,39 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { decrypt } from '@/features/jwt/lib/jwt'
 
-// 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard', '/dashboard/profile', '/dashboard/settings']
-const publicRoutes = ['/auth/login', '/auth/register']
- 
-export default async function proxy(req: NextRequest) {
-  // 2. Check if the current route is protected or public
-  const path             = req.nextUrl.pathname
-  const isProtectedRoute = protectedRoutes.includes(path)
-  const isPublicRoute    = publicRoutes.includes(path)
- 
-  // 3. Decrypt the session from the cookie
+import { Role } from '@/app/generated/prisma'
+import { decrypt } from '@/features/jwt'
+
+export const config = {
+  matcher: [
+    '/auth/:path*',
+    '/dashboard/:path*',
+    '/admin/:path*'
+  ],
+}
+
+export default async function middleware(req: NextRequest) {
+  const path    = req.nextUrl.pathname
   const cookie  = (await cookies()).get('session')?.value
   const payload = cookie ? await decrypt(cookie) : null
- 
-  // 4. Redirect to /login if the user is not authenticated
-  if (isProtectedRoute && !payload?.sessionId) {
+
+  if (path.startsWith('/dashboard') && !payload?.sessionId) {
     return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
   }
- 
-  // 5. Redirect to /dashboard if the user is authenticated
+
   if (
-    isPublicRoute &&
+    path.startsWith('/auth') &&
     payload?.sessionId &&
-    !req.nextUrl.pathname.startsWith('/dashboard')
+    !path.startsWith('/dashboard')
   ) {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
   }
 
+  if (
+    path.startsWith('/admin') &&
+    payload?.role !== Role.ADMIN
+  ) {
+    return NextResponse.redirect(new URL('/', req.nextUrl))
+  }
+
   return NextResponse.next()
-}
- 
-// Routes Proxy should not run on
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

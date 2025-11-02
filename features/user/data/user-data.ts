@@ -1,15 +1,35 @@
 'server only'
 
-import { User } from "@/app/generated/prisma";
+import { Role, User } from "@/app/generated/prisma";
 import prisma from "@/lib/prisma";
 
 export async function createUser(data: {
   name: string,
   email: string,
   password: string,
-  emailVerificationToken: string,
+  emailVerifiedAt?: Date,
+  emailVerificationToken?: string,
+  role?: Role
 }) {
   return prisma.user.create({ data });
+}
+
+/**
+ * Updates a user.
+ */
+export async function updateUser(
+  userId: string,
+  data: {
+    name?: string;
+    email?: string;
+    image?: string,
+    role: Role
+  }) {
+  return prisma.user.update({
+    where: { id: userId },
+    data,
+    select: { id: true, name: true, email: true, image: true, role: true },
+  });
 }
 
 /**
@@ -41,10 +61,8 @@ export async function findUserByEmail(email: string): Promise<User | null> {
   return prisma.user.findUnique({ where: { email } });
 }
 
-export async function getUserById(userId: string) {
-  return prisma.user.findUnique({
-    where: { id: userId },
-  });
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({ where: { id } })
 }
 
 export async function updateUserPassword(userId: string, hashPassword: string) {
@@ -84,5 +102,17 @@ export async function verifyUserEmail(userId: string) {
       email: true,
       emailVerifiedAt: true,
     },
+  });
+}
+
+export async function findUserMany() {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      emailVerifiedAt: true
+    }
   });
 }

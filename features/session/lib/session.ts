@@ -6,7 +6,7 @@ import { UAParser } from 'ua-parser-js'
 import { decrypt, encrypt } from '@/features/jwt'
 import { createUserSession, deleteSessionById } from '@/features/session'
 
-export async function createSession(userId: string) {
+export async function createSession(userId: string, role: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   const headersList = await headers();
@@ -37,7 +37,7 @@ export async function createSession(userId: string) {
   });
 
   // Encrypt the session ID
-  const sessionJWT = await encrypt({ userId, sessionId, expiresAt });
+  const sessionJWT = await encrypt({ userId, sessionId, role, expiresAt });
 
   // Store the session in cookies for optimistic auth checks
   const cookieStore = await cookies();

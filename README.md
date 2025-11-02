@@ -1,6 +1,6 @@
 # 🚀 Next Auth Boilerplate
 
-![Landing](./previews/landing.png)
+![Landing](./demo/landing.png)
 
 This is a modern **Next.js** boilerplate designed to help you kickstart secure authentication in your Next.js projects. It features built-in support for **dark mode**, **TailwindCSS**, a clean modular architecture, and **a real-world database integration**.
 
@@ -22,13 +22,13 @@ This is a modern **Next.js** boilerplate designed to help you kickstart secure a
 
 ## Demo Pages
 
-| Login page                     | Register page                        | Forgot password                 |
-|--------------------------------|--------------------------------------|---------------------------------|
-| ![Login](./previews/login.png) | ![Register](./previews/register.png) | ![Fogot](./previews/forgot.png) |
+| Login page                 | Register page                    | Forgot password             |
+|----------------------------|----------------------------------|-----------------------------|
+| ![Login](./demo/login.png) | ![Register](./demo/register.png) | ![Fogot](./demo/forgot.png) |
 
-| Reset password                 | 404 not found                    | Dashboard                              |
-|--------------------------------|----------------------------------|----------------------------------------|
-| ![Reset](./previews/reset.png) | ![404](./previews/not-found.png) | ![Dashboard](./previews/dashboard.png) |
+| Reset password             | 404 not found                | Dashboard                          |
+|----------------------------|------------------------------|------------------------------------|
+| ![Reset](./demo/reset.png) | ![404](./demo/not-found.png) | ![Dashboard](./demo/dashboard.png) |
 
 ---
 
