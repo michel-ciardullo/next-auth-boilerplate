@@ -28,6 +28,12 @@ export default function UserForm({
   return (
     <form action={formAction} className="space-y-6">
 
+      {state?.error && (
+        <p className="text-sm text-red-600 dark:text-red-400">
+          {state.error}
+        </p>
+      )}
+
       <div>
         <Label htmlFor="name">Name</Label>
         <Input

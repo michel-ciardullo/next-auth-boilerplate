@@ -40,7 +40,14 @@ export async function createSession(userId: string, role: string, rememberMe?: b
   });
 
   // 🔐 Encrypt session data into a JWT
-  const sessionJWT = await encrypt({ userId, sessionId, role, expiresAt });
+  const sessionJWT = await encrypt({
+    id: sessionId,
+    expiresAt,
+    user: {
+      id: userId,
+      role
+    }
+  });
 
   // 🍪 Store the session token in a secure HTTP-only cookie
   const cookieStore = await cookies();
@@ -59,9 +66,9 @@ export async function deleteSession() {
 
   // 🧹 If a session token exists, decrypt it and delete the DB session
   if (token) {
-    const payload = await decrypt(token);
-    if (payload?.sessionId) {
-      await deleteSessionById(payload.sessionId as string);
+    const session = await decrypt(token);
+    if (session?.id) {
+      await deleteSessionById(session.id as string);
     }
   }
 

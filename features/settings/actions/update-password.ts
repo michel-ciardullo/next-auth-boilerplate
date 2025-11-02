@@ -1,10 +1,15 @@
 "use server";
 
 import { z, treeifyError } from "zod";
+import { forbidden, unauthorized } from "next/navigation";
+
+import { verifySession } from "@/features/auth/dal/auth-dal";
+import { Role } from "@/app/generated/prisma";
 
 import { getUserById, updateUserPassword } from "@/features/user";
 import { hashPassword, verifyPassword } from "@/features/password";
 
+// Zod schema to validate password update form input
 const schema = z
   .object({
     currentPassword: z.string().min(1, "Current password is required"),
@@ -16,12 +21,38 @@ const schema = z
     path: ["confirmPassword"],
   });
 
+/**
+ * Server action to update a user's password.
+ * Performs authentication, authorization, validation, and password hashing.
+ */
 export default async function updatePassword(currentState: any, formData: FormData) {
+  // User authentication and role verification
+  const session = await verifySession()
+
+  // Check if the user is authenticated
+  if (!session) {
+    // User is not authenticated
+    unauthorized()
+  }
+
+  // Check if the user has either 'USER' or 'ADMIN' role
+  if (session.user.role !== Role.USER && session.user.role !== Role.ADMIN) {
+    // User is authenticated but does not have permission to delete this account (403)
+    forbidden()
+  }
+
+  // Optional: ensure the user's email is verified before allowing deletion
+  if (session.user.emailVerifiedAt === null) {
+    // User is authenticated but their email is not verified — deny deletion
+    forbidden()
+  }
+
+  // Extract form data
   const currentPassword = formData.get("currentPassword") as string;
   const newPassword     = formData.get("newPassword") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
-  // ✅ Validate input
+  // Validate input using Zod
   const validated = await schema.safeParseAsync({
     currentPassword,
     newPassword,
@@ -38,10 +69,11 @@ export default async function updatePassword(currentState: any, formData: FormDa
   }
 
   try {
-    // ✅ Get user from DB
+    // Retrieve user from the database
     const user = await getUserById(currentState.userId);
 
     if (!user) {
+      // User not found in DB
       return {
         ...currentState,
         success: false,
@@ -51,7 +83,7 @@ export default async function updatePassword(currentState: any, formData: FormDa
       };
     }
 
-    // ❌ Check if current password is correct
+    // Verify that the current password is correct
     const validPassword = await verifyPassword(currentPassword, user.password);
     if (!validPassword) {
       return {
@@ -65,12 +97,13 @@ export default async function updatePassword(currentState: any, formData: FormDa
       };
     }
 
-    // 🔐 Hash new password
+    // Hash the new password
     const hashedPassword = await hashPassword(newPassword);
 
-    // 💾 Update user password
+    // Update the user's password in the database
     await updateUserPassword(currentState.userId, hashedPassword);
 
+    // Return success response
     return {
       ...currentState,
       success: true,
@@ -79,6 +112,8 @@ export default async function updatePassword(currentState: any, formData: FormDa
     };
   } catch (error) {
     console.error(error);
+
+    // Return generic server error
     return {
       ...currentState,
       success: false,

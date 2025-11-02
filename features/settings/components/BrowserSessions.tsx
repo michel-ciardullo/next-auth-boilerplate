@@ -1,5 +1,6 @@
 'use server'
 
+import { verifySession } from "@/features/auth/dal/auth-dal"
 import { logoutOtherSessions, logoutSession } from "../actions/session-actions"
 import { getUserSessions } from "../dal/sessions-dal"
 
@@ -19,6 +20,10 @@ export default async function BrowserSessions() {
   const userSessions = await getUserSessions()
   if (!userSessions?.length) return null
 
+  // Get the current session ID
+  const currentSession = await verifySession()
+  const currentSessionId = currentSession?.id
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-8 pb-10">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -30,26 +35,36 @@ export default async function BrowserSessions() {
       <div className="bg-white dark:bg-gray-800 md:rounded-xl ring ring-gray-900/5 md:col-span-2 px-4 py-6 sm:p-8 md:mr-6">
         <div className="space-y-4">
 
-          {userSessions.map((session) => (
-            <form key={session.id} action={logoutSession.bind(null, session.id)}>
-              <div className="flex items-center justify-between rounded-md border border-gray-200 dark:border-white/10 p-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {session.userAgent || "Unknown browser"}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Last active: {formatTimeAgo(session.updatedAt)} • IP: {session.ipAddress || "N/A"}
-                  </p>
+          {userSessions.map((session) => {
+            const isCurrent = session.id === currentSessionId
+            return (
+              <form key={session.id} action={logoutSession.bind(null, session.id)}>
+                <div className="flex items-center justify-between rounded-md border border-gray-200 dark:border-white/10 p-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                      {session.userAgent || "Unknown browser"}
+                      {isCurrent && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                          Current Session
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Last active: {formatTimeAgo(session.updatedAt)} • IP: {session.ipAddress || "N/A"}
+                    </p>
+                  </div>
+                  {!isCurrent && (
+                    <button
+                      type="submit"
+                      className="text-sm font-semibold text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
+                    >
+                      Log out
+                    </button>
+                  )}
                 </div>
-                <button
-                  type="submit"
-                  className="text-sm font-semibold text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
-                >
-                  Log out
-                </button>
-              </div>
-            </form>
-          ))}
+              </form>
+            )
+          })}
 
           {userSessions.length > 1 && (
             <form action={logoutOtherSessions}>

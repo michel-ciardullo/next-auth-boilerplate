@@ -215,6 +215,13 @@ export default function Navbar() {
                 >
                   Your profile
                 </DisclosureButton>
+                <DisclosureButton
+                  as={Link}
+                  href="/dashboard/settings"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                >
+                  Settings
+                </DisclosureButton>
                 <form action={logoutAction}>
                   <button
                     type="submit"

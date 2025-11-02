@@ -2,9 +2,9 @@
 
 import prisma from "@/lib/prisma";
 
-export async function getSessionById(sessionId: string) {
+export async function getSessionById(id: string) {
   return await prisma.session.findUnique({
-    where: { id: sessionId },
+    where: { id },
     include: { user: true },
   });
 }
@@ -22,9 +22,9 @@ export async function createUserSession(data: {
   return prisma.session.create({ data });
 }
 
-export async function deleteSessionById(sessionId: string) {
+export async function deleteSessionById(id: string) {
   return prisma.session.delete({
-    where: { id: sessionId }
+    where: { id }
   });
 }
 

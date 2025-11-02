@@ -1,8 +1,7 @@
 'use server'
 
-import { ButtonBack } from '@/features/admin'
+import { ButtonBack, UserForm } from '@/features/admin'
 import { getUserById } from '@/features/user'
-import UserForm from '@/features/admin/components/user-form'
 
 export default async function AdminUserEdit({
   params
