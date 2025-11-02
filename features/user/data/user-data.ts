@@ -105,14 +105,17 @@ export async function verifyUserEmail(userId: string) {
   });
 }
 
-export async function findUserMany() {
-  return prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      emailVerifiedAt: true
-    }
-  });
+export async function findUserMany(page: number = 1, perPage: number = 10) {
+  const skip = (page - 1) * perPage
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      skip,
+      take: perPage,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.user.count(),
+  ])
+
+  return { users, total }
 }

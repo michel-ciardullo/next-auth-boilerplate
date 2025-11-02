@@ -3,7 +3,14 @@ import { Suspense } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { UserTable, UserTableSkeleton } from '@/features/admin'
 
-export default async function AdminUsers() {
+export default async function AdminUsers({
+  searchParams
+}: {
+  searchParams?: Promise<{ page?: string }>
+}) {
+  const params = await searchParams
+  const page = Number(params?.page) || 1
+
   return (
     <div className="p-4 sm:p-8 sm:ml-64 mt-16 sm:mt-14 space-y-8">
       
@@ -26,7 +33,7 @@ export default async function AdminUsers() {
       <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
 
         <Suspense fallback={<UserTableSkeleton />}>
-          <UserTable />
+          <UserTable page={page} />
         </Suspense>
         
       </div>

@@ -2,16 +2,19 @@ import { cache } from "react"
 import { cookies } from "next/headers"
 
 import { getSessionById } from "@/features/session"
-import { decrypt } from "@/features/jwt"
 import { User } from "@/app/generated/prisma"
+import { decrypt } from "@/features/jwt"
 
 export const verifySession = cache(async () => {
   const cookie  = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
  
-  if (!session) {
+  if (!session)
     return null
-  }
+
+  const expiresAt = session.expiresAt as Date
+  if (expiresAt < new Date())
+    return null;
 
   return {
     id: session.id,
@@ -25,8 +28,7 @@ export const getUser = cache(async () => {
   if (!session || !session.id) return null
 
   const data = await getSessionById(session.id as string)
-
-  if (!data || data.expiresAt < new Date()) return null;
+  if (!data) return null;
   
   return {
     id: data.user.id,
