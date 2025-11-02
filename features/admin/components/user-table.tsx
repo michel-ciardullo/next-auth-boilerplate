@@ -5,6 +5,7 @@ import { PencilIcon } from '@heroicons/react/24/outline'
 import { findUserMany } from '@/features/user'
 import { deleteUserById } from '../actions/delete-user'
 import DeleteUserModal from './user-delete-modal'
+import { EyeIcon } from '@heroicons/react/24/solid'
 
 export default async function AdminUsers() {
   const users = await findUserMany()
@@ -46,6 +47,12 @@ export default async function AdminUsers() {
               </span>
             </td>
             <td className="px-6 py-4 flex gap-3 justify-end">
+              <Link
+                href={`/admin/users/${user.id}`}
+                className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                <EyeIcon className="h-5 w-5" />
+              </Link>
               <Link href={`/admin/users/${user.id}/edit`} className="text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400">
                 <PencilIcon className="h-5 w-5" />
               </Link>
