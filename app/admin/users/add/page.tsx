@@ -7,9 +7,9 @@ export default function AdminUserAdd() {
       {/* Header */}
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Edit User</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Create User</h1>
           <p className="text-gray-500 dark:text-gray-400">
-            Update user account information, roles, and permissions.
+            Fill out the form below to add a new user account. You can assign roles and set initial credentials.
           </p>
         </div>
         <ButtonBack />
