@@ -70,6 +70,33 @@ export default function Login() {
             </div>
           </div>
 
+          {/* Remember me switch */}
+          <div>
+            <div className="flex gap-x-4">
+              <div className="flex h-6 items-center">
+                <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px inset-ring inset-ring-gray-900/5 outline-offset-2 outline-indigo-600 transition-colors duration-200 ease-in-out has-checked:bg-indigo-600 has-focus-visible:outline-2 dark:bg-gray-700 dark:has-checked:bg-indigo-500">
+                  <span className="size-4 rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-3.5 dark:ring-gray-700" />
+                  <input
+                    id="remember"
+                    name="remember"
+                    type="checkbox"
+                    aria-label="Remember me"
+                    className="absolute inset-0 appearance-none focus:outline-hidden cursor-pointer"
+                    defaultChecked={state?.remember}
+                  />
+                </div>
+              </div>
+              <label htmlFor="remember" className="text-sm/6 text-gray-600 dark:text-gray-300">
+                Remember me
+              </label>
+            </div>
+            {state?.errors?.properties?.remember?.errors?.length && (
+              <small className="text-red-600 dark:text-red-400 block mt-1">
+                {state.errors.properties.remember.errors[0]}
+              </small>
+            )}
+          </div>
+
           <button
             type="submit"
             disabled={pending}

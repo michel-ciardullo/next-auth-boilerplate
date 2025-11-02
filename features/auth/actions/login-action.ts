@@ -13,14 +13,17 @@ const schema = z
   .object({
     email: z.email("Invalid email address"),
     password: z.string().trim(),
+    remember: z.enum(["on"]).optional().nullable()
   });
 
 export default async function loginAction(currentState: any, formData: FormData) {
   const email    = (formData.get("email") as string)?.trim() || "";
   const password = formData.get("password") as string;
+  const remember = formData.get("remember") as string | null;
 
   // Zod validation
-  const validatedFields = await schema.safeParseAsync({ email, password });
+  console.log(remember)
+  const validatedFields = await schema.safeParseAsync({ email, password, remember });
 
   // Return early if the form data is invalid
   if (!validatedFields.success) {
@@ -46,7 +49,7 @@ export default async function loginAction(currentState: any, formData: FormData)
   }
 
   // create jwt with session database.
-  await createSession(user.id, user.role)
+  await createSession(user.id, user.role, remember === 'on')
 
   // Redirect to profile page
   redirect("/dashboard");
