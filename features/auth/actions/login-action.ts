@@ -22,7 +22,6 @@ export default async function loginAction(currentState: any, formData: FormData)
   const remember = formData.get("remember") as string | null;
 
   // Zod validation
-  console.log(remember)
   const validatedFields = await schema.safeParseAsync({ email, password, remember });
 
   // Return early if the form data is invalid
