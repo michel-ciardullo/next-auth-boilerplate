@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+
 import useAuth from '../auth/hooks/auth-hook'
+import AppLogo from './app-logo'
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -23,11 +25,7 @@ export default function LandingNavbar() {
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Next Auth Boilerplate</span>
-            <img
-              alt=""
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
-            />
+            <AppLogo className="h-8 w-auto" />
           </Link>
         </div>
         <div className="flex md:hidden">
@@ -62,11 +60,7 @@ export default function LandingNavbar() {
           <div className="flex items-center justify-between">
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img
-                alt=""
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
+              <AppLogo className="h-8 w-auto" />
             </Link>
             <button
               type="button"

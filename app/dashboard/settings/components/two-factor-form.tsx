@@ -1,7 +1,7 @@
 'use client'
 
-import Label from '@/app/components/ui/form/label'
-import Input from '@/app/components/ui/form/input'
+import Label from '@/app/components/form-label'
+import Input from '@/app/components/form-input'
 
 export default function TwoFactorForm() {
   return (

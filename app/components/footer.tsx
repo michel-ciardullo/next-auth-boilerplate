@@ -1,3 +1,6 @@
+import Link from "next/link"
+import AppLogo from "./app-logo"
+
 const categories = [
   {
     name: 'Solutions',
@@ -89,16 +92,12 @@ export default function Footer() {
         <div className="md:flex md:justify-between">
 
           <div className="mb-6 md:mb-0">
-            <a href="/" className="flex items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="mr-3 size-8"
-              />
+            <Link href="/" className="flex items-center">
+              <AppLogo className="mr-3 size-8" />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                 Next Auth
               </span>
-            </a>
+            </Link>
             <p className="mt-4 text-gray-600 dark:text-gray-400">
               Making the world a better place through constructing elegant hierarchies.
             </p>
@@ -192,9 +191,9 @@ export default function Footer() {
                 <ul className="text-gray-600 dark:text-gray-400 flex flex-col gap-y-3">
                   {category.items.map((item, index) => (
                     <li key={index}>
-                      <a href={item.href} className="hover:underline">
+                      <Link href={item.href} className="hover:underline">
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -209,9 +208,9 @@ export default function Footer() {
         <div>
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2025{" "}
-            <a href="/" className="hover:underline">
+            <Link href="/" className="hover:underline">
               Your Company
-            </a>
+            </Link>
             , Inc. All rights reserved.
           </span>
         </div>

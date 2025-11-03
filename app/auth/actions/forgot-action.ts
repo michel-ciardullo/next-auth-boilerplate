@@ -29,7 +29,24 @@ const schema = z
     }
   });
 
-export default async function forgetAction(currentState: any, formData: FormData) {
+type ForgotActionState = {
+  data?: {
+    email?: string
+  },
+  success?: boolean
+  errors?: {
+    properties?: {
+      email?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+} | null
+
+export default async function forgetAction(
+  currentState: ForgotActionState,
+  formData: FormData
+): Promise<ForgotActionState> {
   const email = (formData.get("email") as string)?.trim() || "";
 
   // Zod validation
@@ -41,7 +58,7 @@ export default async function forgetAction(currentState: any, formData: FormData
     return {
       ...currentState,
       success: false,
-      email,
+      data: { email },
       errors,
     };
   }

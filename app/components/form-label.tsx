@@ -1,10 +1,6 @@
-import React, { LabelHTMLAttributes } from "react";
+import { LabelHTMLAttributes } from "react";
 
-interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
-  
-}
-
-export default function Label(props: LabelProps) {
+export default function FormLabel(props: LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
       {...props}

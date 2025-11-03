@@ -2,6 +2,8 @@
 
 import { useActionState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+
+import AppLogo from "@/app/components/app-logo";
 import verifyAction from "../actions/verify-action";
 
 export default function VerifyEmailPage() {
@@ -9,7 +11,9 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const token = searchParams.get("token") || "";
 
-  const [state, formAction, isPending] = useActionState(verifyAction, { token });
+  const [state, formAction, isPending] = useActionState(verifyAction, {
+    data: { token }
+  });
 
   const handleRedirect = () => {
     setTimeout(() => router.push("/auth/login"), 2000);
@@ -22,11 +26,13 @@ export default function VerifyEmailPage() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
+        <AppLogo className="mx-auto h-10 w-auto" />
         <h2 className="mt-10 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           Email Verification
         </h2>
-        {state?.errors?.general && (
-          <p className="mt-4 text-red-600 dark:text-red-400">{state.errors.general}</p>
+
+        {state?.error && (
+          <p className="mt-4 text-red-600 dark:text-red-400">{state.error}</p>
         )}
         {state?.success && (
           <p className="mt-4 text-green-600 dark:text-green-400">

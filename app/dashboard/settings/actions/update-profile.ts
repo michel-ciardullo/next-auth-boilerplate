@@ -28,11 +28,33 @@ const schema = z
     email: z.email("Invalid email address"),
   });
 
+type UpdateProfileState = {
+  data: {
+    id: string
+    username?: string
+    email: string
+    image?: string | null
+  }
+  success?: boolean
+  errors?: {
+    properties?: {
+      image?: { errors: string[] }
+      username?: { errors: string[] }
+      email?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+}
+
 /**
  * Server action to update a user's profile including username, email, and profile image.
  * Performs authentication, authorization, validation, secure file handling, and database update.
  */
-export default async function updateProfile(currentState: any, formData: FormData) {
+export default async function updateProfile(
+  prevState: UpdateProfileState,
+  formData: FormData
+): Promise<UpdateProfileState> {
   // User authentication and role verification
   const session = await verifySession()
 
@@ -58,6 +80,7 @@ export default async function updateProfile(currentState: any, formData: FormDat
   const username = (formData.get("username") as string)?.trim()
   const email = (formData.get("email") as string)?.trim()
   const file = formData.get("image") as File | null
+  const { id } = prevState?.data
 
   // Validate username and email using Zod
   const validatedFields = await schema.safeParseAsync({ username, email })
@@ -66,26 +89,24 @@ export default async function updateProfile(currentState: any, formData: FormDat
   if (!validatedFields.success) {
     const errors = treeifyError(validatedFields.error)
     return {
-      ...currentState,
-      username,
-      email,
+      ...prevState,
+      data: { id, username, email },
       success: false,
       errors,
     };
   }
 
-  let imageUrl = currentState.image
+  let imageUrl = prevState?.data?.image
 
   try {
     if (file && file.size > 0) {
       // Check maximum file size
       if (file.size > MAX_BYTES) {
         return {
-          ...currentState,
-          username,
-          email,
+          ...prevState,
+          data: { id, username, email },
           success: false,
-          errors: { server: { errors: ["Image too large (max 5MB)"] } },
+          error: "Image too large (max 5MB)",
         };
       }
 
@@ -94,11 +115,10 @@ export default async function updateProfile(currentState: any, formData: FormDat
       const ext = MIME_TO_EXT[mime];
       if (!ext) {
         return {
-          ...currentState,
-          username,
-          email,
+          ...prevState,
+          data: { id, username, email },
           success: false,
-          errors: { server: { errors: ["Unsupported image type"] } },
+          error: "Unsupported image type",
         };
       }
 
@@ -107,7 +127,7 @@ export default async function updateProfile(currentState: any, formData: FormDat
       const buffer = Buffer.from(bytes);
 
       // Generate a safe filename using the user ID and MIME-derived extension
-      const fileName = `${currentState.userId}.${ext}`;
+      const fileName = `${prevState.data.id}.${ext}`;
       const uploadDir = path.join(process.cwd(), "public", "uploads");
 
       // Ensure upload directory exists and write the file
@@ -119,20 +139,18 @@ export default async function updateProfile(currentState: any, formData: FormDat
     }
 
     // Update user profile in the database
-    await updateUserProfile(currentState.userId, {
+    await updateUserProfile(prevState.data.id, {
       name: validatedFields.data.username,
       email: validatedFields.data.email,
-      image: imageUrl,
+      image: imageUrl || undefined,
     })
 
     // Return success response
     return {
-      ...currentState,
+      ...prevState,
       success: true,
-      username,
-      email,
-      message: "Profile successfully updated",
-      errors: null
+      data: { id, username, email },
+      message: 'Profile successfully updated',
     }
   }
   catch (error) {
@@ -140,14 +158,10 @@ export default async function updateProfile(currentState: any, formData: FormDat
 
     // Return generic server error if anything unexpected happens
     return {
-      ...currentState,
-      username,
-      email,
-      image: imageUrl,
+      ...prevState,
+      data: { id, username, email },
       success: false,
-      errors: {
-        server: { errors: ["An unexpected error occurred"] },
-      },
+      error: 'An unexpected error occurred',
     }
   }
 }

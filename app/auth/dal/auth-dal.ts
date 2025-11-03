@@ -25,16 +25,10 @@ export const verifySession = cache(async () => {
 
 export const getUser = cache(async () => {
   const session = await verifySession()
-  if (!session || !session.id) return null
+  if (!session || !session.id) return undefined
 
   const data = await getSessionById(session.id as string)
-  if (!data) return null;
+  if (!data) return undefined;
   
-  return {
-    id: data.user.id,
-    name: data.user.name,
-    email: data.user.email,
-    image: data.user.image,
-    role: data.user.role,
-  };
+  return data.user as User;
 })

@@ -1,12 +1,12 @@
 'use client'
 
-import { useActionState, useEffect, useRef, useState } from 'react'
+import { useActionState, useRef, useState } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 
-import Label from '@/app/components/ui/form/label'
-import Input from '@/app/components/ui/form/input'
-import useAuth from '@/app/auth/hooks/auth-hook'
+import FormLabel from '@/app/components/form-label'
+import FormInput from '@/app/components/form-input'
+import FormErrors from '@/app/components/form-errors'
 import updateProfile from '../actions/update-profile'
 
 interface ProfileFormProps {
@@ -20,23 +20,16 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ user }: ProfileFormProps) {
   const [state, formAction, isPending] = useActionState(updateProfile, {
-    userId: user.id,
-    username: user.name,
-    email: user.email,
-    image: user.image ?? '',
-    success: false
+    data: {
+      id: user.id,
+      username: user.name || '',
+      email: user.email,
+      image: user.image ?? '',
+    }
   })
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [preview, setPreview] = useState(user.image ?? '')
-
-  const { update: updateSession } = useAuth()
-
-  useEffect(() => {
-    if (state.success) {
-      updateSession({ name: state.username, email: state.email, image: state.image })
-    }
-  }, [state.success, state.username, state.email, state.image])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -58,16 +51,24 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         <div className="px-4 py-6 sm:p-8">
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-            {state?.errors?.server?.errors && (
+            {state?.message && (
+              <div className="col-span-full">
+                <span className="text-sm/6 text-gray-600 dark:text-gray-400">
+                  {state?.message}
+                </span>
+              </div>
+            )}
+
+            {state?.error && (
               <div className="col-span-full">
                 <span className="text-sm/6 text-red-600 dark:text-red-400">
-                  {state.errors.server.errors[0]}
+                  {state?.error}
                 </span>
               </div>
             )}
 
             <div className="col-span-full">
-              <Label htmlFor="image">Photo</Label>
+              <FormLabel htmlFor="image">Photo</FormLabel>
               <input
                 type="file"
                 ref={fileInputRef}
@@ -97,16 +98,19 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                   Change
                 </button>
               </div>
+              <FormErrors errors={state?.errors?.properties?.image?.errors} />
             </div>
 
             <div className="col-span-full">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" name="username" type="text" className="mt-2" defaultValue={state.username} />
+              <FormLabel htmlFor="username">Username</FormLabel>
+              <FormInput id="username" name="username" type="text" className="mt-2" defaultValue={state.data.username} />
+              <FormErrors errors={state?.errors?.properties?.username?.errors} />
             </div>
 
             <div className="col-span-full">
-              <Label htmlFor="email">Email address</Label>
-              <Input id="email" name="email" type="email" autoComplete="email" className="mt-2" defaultValue={state.email} />
+              <FormLabel htmlFor="email">Email address</FormLabel>
+              <FormInput id="email" name="email" type="email" autoComplete="email" className="mt-2" defaultValue={state.data.email} />
+              <FormErrors errors={state?.errors?.properties?.email?.errors} />
             </div>
           </div>
         </div>

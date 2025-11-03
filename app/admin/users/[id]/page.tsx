@@ -58,13 +58,17 @@ export default async function AdminUserShow({
           <div className="py-4 flex justify-between text-sm">
             <dt className="text-gray-500 dark:text-gray-400">Created At</dt>
             <dd className="text-gray-900 dark:text-gray-100">
-              {new Date(user?.createdAt!).toLocaleString()}
+              {user?.createdAt
+                ? new Date(user.createdAt).toLocaleString()
+                : '—'}
             </dd>
           </div>
           <div className="py-4 flex justify-between text-sm">
             <dt className="text-gray-500 dark:text-gray-400">Last Updated</dt>
             <dd className="text-gray-900 dark:text-gray-100">
-              {new Date(user?.updatedAt!).toLocaleString()}
+              {user?.updatedAt
+                ? new Date(user.updatedAt).toLocaleString()
+                : '—'}
             </dd>
           </div>
         </dl>

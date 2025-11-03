@@ -2,10 +2,6 @@
 // It guarantees that secret keys and JWT signing logic run only on the server.
 import 'server-only'
 
-// Importing JWT utilities from the “jose” library.
-// - JWTPayload: type representing the content of a JWT.
-// - SignJWT: class used to sign (create) a JWT.
-// - jwtVerify: function used to verify and decode an existing JWT.
 import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 
 // Retrieve the secret key from environment variables.
@@ -57,7 +53,7 @@ export async function decrypt(token: string | undefined = '') {
     return payload
   } catch (error) {
     // In case of failure (e.g., expired token, corrupted token, incorrect key), log an error.
-    console.error('Failed to verify session token')
+    console.error('Failed to verify session token:', error)
   }
 
   // Returns null if the token is invalid.

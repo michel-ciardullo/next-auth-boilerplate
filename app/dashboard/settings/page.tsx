@@ -3,13 +3,13 @@
 import Navbar from '@/app/components/navbar'
 import Header from '@/app/components/header'
 import Footer from '@/app/components/footer'
-import { getUser } from '@/app/auth/dal/auth-dal'
 
-import ProfileForm from './components/ProfileForm'
-import UpdatePasswordForm from './components/UpdatePasswordForm'
-import TwoFactorForm from './components/TwoFactorForm'
-import BrowserSessions from './/components/BrowserSessions'
-import DeleteAccountForm from './components/DeleteAccountForm'
+import { getUser } from '@/app/auth/dal/auth-dal'
+import ProfileForm from './components/profile-form'
+import UpdatePasswordForm from './components/update-password-form'
+import TwoFactorForm from './components/two-factor-form'
+import BrowserSessions from './components/browser-sessions'
+import DeleteAccountForm from './components/delete-account-form'
 
 export default async function Settings() {
   const user = await getUser()

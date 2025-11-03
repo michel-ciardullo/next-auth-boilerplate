@@ -2,13 +2,24 @@
 
 import { findUserByEmailVerificationToken, verifyUserEmail } from "@/app/user";
 
-export default async function verifyAction(currentState: any, formData: FormData) {
+type VerifyActionState = {
+  data?: {
+    token?: string
+  }
+  success?: boolean
+  error?: string
+}
+
+export default async function verifyAction(
+  currentState: VerifyActionState,
+  formData: FormData
+): Promise<VerifyActionState> {
   const token = (formData.get("token") as string)?.trim();
 
   if (!token) {
     return {
       ...currentState,
-      errors: { general: "Invalid or missing token" },
+      error: "Invalid or missing token",
     };
   }
 
@@ -17,7 +28,7 @@ export default async function verifyAction(currentState: any, formData: FormData
   if (!user) {
     return {
       ...currentState,
-      errors: { general: "Invalid or expired token" },
+      error: "Invalid or expired token",
     };
   }
 

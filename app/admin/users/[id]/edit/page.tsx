@@ -1,7 +1,8 @@
 'use server'
 
 import ButtonBack from '@/app/admin/components/button-back'
-import UserForm from '@/app/admin/components/user-form'
+import UserEditForm from '@/app/admin/components/user-edit-form'
+import { User } from '@/app/generated/prisma'
 import { getUserById } from '@/app/user'
 
 export default async function AdminUserEdit({
@@ -12,7 +13,7 @@ export default async function AdminUserEdit({
   }>
 }>) {
   const { id: userId } = await params
-  const user = await getUserById(userId)
+  const user = await getUserById(userId) as User
 
   return (
     <div className="p-4 sm:p-8 sm:ml-64 mt-16 sm:mt-14 space-y-8">
@@ -28,7 +29,7 @@ export default async function AdminUserEdit({
       </header>
 
       {/* Form */}
-      <UserForm data={user} />
+      <UserEditForm data={user} />
 
       <footer className="text-center text-sm text-gray-500 dark:text-gray-400 pt-6">
         © {new Date().getFullYear()} – Edit User

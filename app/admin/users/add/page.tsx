@@ -1,5 +1,5 @@
 import ButtonBack from "@/app/admin/components/button-back";
-import UserForm from "@/app/admin/components/user-form";
+import UserAddForm from "@/app/admin/components/user-add-form";
 
 export default function AdminUserAdd() {
   return (
@@ -16,7 +16,7 @@ export default function AdminUserAdd() {
       </header>
 
       {/* Form */}
-      <UserForm />
+      <UserAddForm />
 
       <footer className="text-center text-sm text-gray-500 dark:text-gray-400 pt-6">
         © {new Date().getFullYear()} – Add User

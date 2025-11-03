@@ -1,34 +1,21 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
+
+import { User } from "@/app/generated/prisma";
 import { AuthContext } from "../context/auth-context";
 
 interface AuthProviderProps {
-  user?: any
+  user?: User
   children: ReactNode
 }
 
-export default function AuthProvider({ user: initialUser, children }: AuthProviderProps) {
-  const [user, setUser] = useState<any>(initialUser);
-  const [loading, setLoading] = useState<boolean>(initialUser === undefined);
-
-  useEffect(() => {
-    if (user !== initialUser)
-      setUser(initialUser)
-  }), [initialUser]
-
-  const value = useMemo(() => ({
+export default function AuthProvider({ user, children }: AuthProviderProps) {
+  const cachedValue = useMemo(() => ({
     user,
-    status: loading
-      ? "loading"
-      : user
-        ? "authenticated"
-        : "unauthenticated",
-    async update(data: any) {
-      
-    }
-  }), [user, loading]);
+    status: user ? "authenticated" : "unauthenticated",
+  }), [user]);
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={cachedValue}>
       {children}
     </AuthContext.Provider>
   );

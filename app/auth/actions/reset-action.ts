@@ -18,7 +18,26 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-export default async function resetAction(currentState: any, formData: FormData) {
+type ResetActionState = {
+  data?: {
+    password?: string
+    confirmPassword?: string
+  }
+  success?: boolean
+  errors?: {
+    properties?: {
+      password?: { errors: string[] }
+      confirmPassword?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+} | null
+
+export default async function resetAction(
+  currentState: ResetActionState,
+  formData: FormData
+): Promise<ResetActionState> {
   const token = (formData.get("token") as string)?.trim();
   const password        = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;

@@ -1,6 +1,7 @@
 'use server'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { PencilIcon, EyeIcon } from '@heroicons/react/24/outline'
 
 import { findUserMany } from '@/app/user'
@@ -35,14 +36,25 @@ export default async function UserTable({ page }: { page: number }) {
           {users.map((user) => (
             <tr key={user.id}>
               <th scope="row" className="min-w-[200px] px-4 sm:pl-0 flex items-center py-4 whitespace-nowrap text-gray-900 dark:text-white">
-                <img
-                  alt={user.name || 'User'}
-                  src={
-                    user.image ||
-                    'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User')
-                  }
-                  className="w-10 h-10 rounded-full"
-                />
+                {user.image ? (
+                  <Image
+                    alt={user.name || 'User'}
+                    src={user.image}
+                    className="w-10 h-10 rounded-full object-cover"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold">
+                    {user.name
+                      ? user.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .toUpperCase()
+                      : 'U'}
+                  </div>
+                )}
                 <div className="ps-3 flex-shrink-0">
                   <div className="text-base font-semibold">{user.name}</div>
                   <div className="font-normal text-gray-500 dark:text-gray-400">{user.email}</div>

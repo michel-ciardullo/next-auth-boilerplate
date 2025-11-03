@@ -16,7 +16,26 @@ const schema = z
     remember: z.enum(["on"]).optional().nullable()
   });
 
-export default async function loginAction(currentState: any, formData: FormData) {
+type LoginActionState = {
+  data: {
+    email: string
+  },
+  success?: boolean
+  errors?: {
+    properties?: {
+      email?: { errors: string[] }
+      password?: { errors: string[] }
+      remember?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+} | null
+
+export default async function loginAction(
+  currentState: LoginActionState,
+  formData: FormData
+): Promise<LoginActionState> {
   const email    = (formData.get("email") as string)?.trim() || "";
   const password = formData.get("password") as string;
   const remember = formData.get("remember") as string | null;
@@ -27,7 +46,11 @@ export default async function loginAction(currentState: any, formData: FormData)
   // Return early if the form data is invalid
   if (!validatedFields.success) {
     const errors = treeifyError(validatedFields.error)
-    return { ...currentState, email, errors };
+    return {
+      ...currentState,
+      data: { email },
+      errors
+    };
   }
 
   const user = await findUserByEmail(email);
@@ -38,7 +61,7 @@ export default async function loginAction(currentState: any, formData: FormData)
 
   if (!user || !valid) {
     return {
-      email,
+      data: { email },
       errors: {
         properties: {
           password: { errors: ["Invalid email or password"] },

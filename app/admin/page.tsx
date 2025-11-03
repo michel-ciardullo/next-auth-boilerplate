@@ -14,8 +14,8 @@ export default async function AdminHome() {
   const statCards = [
     { title: 'Total Users', value: stats.totalUsers.toLocaleString() },
     { title: 'Active Sessions', value: stats.totalSessions.toLocaleString() },
-    { title: 'Total Orders', value: stats.totalOrders.toLocaleString() },
-    { title: 'Revenue', value: `${stats.totalRevenue.toLocaleString()} €` },
+    { title: 'Total Orders', value: 0 },
+    { title: 'Revenue', value: `${0} €` },
   ]
 
   return (

@@ -4,8 +4,11 @@ import { useActionState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-import Input from "@/app/components/ui/form/input";
-import Label from "@/app/components/ui/form/label";
+import FormLabel from "@/app/components/form-label";
+import FormInput from "@/app/components/form-input";
+import FormErrors from "@/app/components/form-errors";
+
+import AppLogo from "@/app/components/app-logo";
 import resetAction from "../actions/reset-action";
 
 export default function ResetPasswordPage() {
@@ -23,11 +26,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Your Company"
-          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
+        <AppLogo className="mx-auto h-10 w-auto" />
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           Reset your password
         </h2>
@@ -39,32 +38,15 @@ export default function ResetPasswordPage() {
             <input type="hidden" name="token" value={token || ""} />
 
             <div>
-              <Label htmlFor="password">New password</Label>
-              <div className="mt-2">
-                <Input id="password" name="password" type="password" required />
-                {state?.errors?.properties?.password?.errors?.length > 0 && (
-                  <small className="text-red-600 dark:text-red-400 block mt-1">
-                    {state.errors.properties.password.errors[0]}
-                  </small>
-                )}
-              </div>
+              <FormLabel htmlFor="password">New password</FormLabel>
+              <FormInput className="mt-2" id="password" name="password" type="password" required />
+              <FormErrors errors={state?.errors?.properties?.password?.errors} />
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword">Confirm password</Label>
-              <div className="mt-2">
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                />
-                {state?.errors?.properties?.confirmPassword?.errors?.length > 0 && (
-                  <small className="text-red-600 dark:text-red-400 block mt-1">
-                    {state.errors.properties.confirmPassword.errors[0]}
-                  </small>
-                )}
-              </div>
+              <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
+              <FormInput className="mt-2" id="confirmPassword" name="confirmPassword" type="password" required />
+              <FormErrors errors={state?.errors?.properties?.confirmPassword?.errors} />
             </div>
 
             <button

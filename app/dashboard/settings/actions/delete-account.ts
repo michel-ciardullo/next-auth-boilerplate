@@ -1,6 +1,6 @@
 "use server"
 
-import { z } from "zod"
+import { treeifyError, z } from "zod"
 import { forbidden, unauthorized } from "next/navigation"
 
 import { verifySession } from "@/app/auth/dal/auth-dal"
@@ -17,11 +17,30 @@ const schema = z.object({
     }),
 })
 
+type DeleteAccountState = {
+  data: {
+    userId: string
+    confirmDelete?: string
+  }
+  success?: boolean
+  errors?: {
+    properties?: {
+      userId?: { errors: string[] }
+      confirmDelete?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+}
+
 /**
  * Server action to delete a user's account.
  * Performs authentication, authorization, confirmation validation, and account deletion.
  */
-export default async function deleteAccount(currentState: any, formData: FormData) {
+export default async function deleteAccount(
+  prevState: DeleteAccountState,
+  formData: FormData
+): Promise<DeleteAccountState> {
   // User authentication and role verification
   const session = await verifySession()
 
@@ -51,10 +70,11 @@ export default async function deleteAccount(currentState: any, formData: FormDat
     // Validate the confirmation input
     const validated = schema.safeParse({ confirmDelete })
     if (!validated.success) {
+      const errors = treeifyError(validated.error);
       return {
-        ...currentState,
+        ...prevState,
         success: false,
-        errors: z.treeifyError(validated.error),
+        errors,
       }
     }
 
@@ -63,7 +83,7 @@ export default async function deleteAccount(currentState: any, formData: FormDat
 
     // Return success response
     return {
-      ...currentState,
+      ...prevState,
       success: true,
       message: "Your account has been deleted successfully.",
     }
@@ -72,7 +92,7 @@ export default async function deleteAccount(currentState: any, formData: FormDat
 
     // Return a generic error response
     return {
-      ...currentState,
+      ...prevState,
       success: false,
       error: "An unexpected error occurred while deleting your account.",
     }

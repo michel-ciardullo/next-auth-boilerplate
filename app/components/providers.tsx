@@ -1,9 +1,10 @@
 'use client'
 
 import AuthProvider from "../auth/components/auth-provider"
+import { User } from "../generated/prisma"
 
 interface ProvidersProps {
-  user: any
+  user?: User
   children: React.ReactNode
 }
 

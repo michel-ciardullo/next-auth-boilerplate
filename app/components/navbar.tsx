@@ -1,14 +1,17 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { classNames } from '@/utils/functions'
 import { Role } from '@/app/generated/prisma'
+
 import useAuth from '../auth/hooks/auth-hook'
 import logoutAction from '../auth/actions/logout-action'
+import AppLogo from './app-logo'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -32,11 +35,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <div className="shrink-0">
               <Link href="/">
-                <img
-                  alt="Your Company"
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                  className="size-8"
-                />
+                <AppLogo className="size-8" />
               </Link>
             </div>
             <div className="hidden md:block">
@@ -81,14 +80,25 @@ export default function Navbar() {
                 <Menu as="div" className="relative ml-3">
                   <MenuButton className="flex max-w-xs items-center rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      alt={user.name || 'User'}
-                      src={
-                        user.image ||
-                        'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User')
-                      }
-                      className="size-8 rounded-full outline -outline-offset-1 outline-white/10"
-                    />
+                    {user.image ? (
+                      <Image
+                        alt={user.name || 'User'}
+                        src={user.image}
+                        width={32}
+                        height={32}
+                        className="size-8 rounded-full outline -outline-offset-1 outline-white/10 object-cover"
+                      />
+                    ) : (
+                      <div className="size-8 rounded-full outline -outline-offset-1 outline-white/10 bg-indigo-500 flex items-center justify-center text-white font-semibold">
+                        {user.name
+                          ? user.name
+                              .split(' ')
+                              .map((n) => n[0])
+                              .join('')
+                              .toUpperCase()
+                          : 'U'}
+                      </div>
+                    )}
                   </MenuButton>
 
                   <MenuItems
@@ -189,14 +199,25 @@ export default function Navbar() {
             <>
               <div className="flex items-center px-5">
                 <div className="shrink-0">
-                  <img
-                    alt={user.name || ''}
-                    src={
-                      user.image ||
-                      'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User')
-                    }
-                    className="size-10 rounded-full outline -outline-offset-1 outline-white/10"
-                  />
+                  {user.image ? (
+                    <Image
+                      alt={user.name || 'User'}
+                      src={user.image}
+                      width={40}
+                      height={40}
+                      className="size-10 rounded-full outline -outline-offset-1 outline-white/10 object-cover"
+                    />
+                  ) : (
+                    <div className="size-10 rounded-full outline -outline-offset-1 outline-white/10 bg-indigo-500 flex items-center justify-center text-white font-semibold">
+                      {user.name
+                        ? user.name
+                            .split(' ')
+                            .map((n) => n[0])
+                            .join('')
+                            .toUpperCase()
+                        : 'U'}
+                    </div>
+                  )}
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-white">{user.name}</div>

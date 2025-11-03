@@ -21,11 +21,33 @@ const schema = z
     path: ["confirmPassword"],
   });
 
+type UpdatePasswordState = {
+  data: {
+    id: string
+    currentPassword?: string
+    newPassword?: string
+    confirmPassword?: string
+  }
+  success?: boolean
+  errors?: {
+    properties?: {
+      currentPassword?: { errors: string[] }
+      newPassword?: { errors: string[] }
+      confirmPassword?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+}
+
 /**
  * Server action to update a user's password.
  * Performs authentication, authorization, validation, and password hashing.
  */
-export default async function updatePassword(currentState: any, formData: FormData) {
+export default async function updatePassword(
+  prevState: UpdatePasswordState,
+  formData: FormData
+): Promise<UpdatePasswordState> {
   // User authentication and role verification
   const session = await verifySession()
 
@@ -62,7 +84,7 @@ export default async function updatePassword(currentState: any, formData: FormDa
   if (!validated.success) {
     const errors = treeifyError(validated.error);
     return {
-      ...currentState,
+      ...prevState,
       success: false,
       errors,
     };
@@ -70,16 +92,14 @@ export default async function updatePassword(currentState: any, formData: FormDa
 
   try {
     // Retrieve user from the database
-    const user = await getUserById(currentState.userId);
+    const user = await getUserById(prevState.data.id);
 
     if (!user) {
       // User not found in DB
       return {
-        ...currentState,
+        ...prevState,
         success: false,
-        errors: {
-          server: { errors: ["User not found"] },
-        },
+        error: 'User not found',
       };
     }
 
@@ -87,7 +107,7 @@ export default async function updatePassword(currentState: any, formData: FormDa
     const validPassword = await verifyPassword(currentPassword, user.password);
     if (!validPassword) {
       return {
-        ...currentState,
+        ...prevState,
         success: false,
         errors: {
           properties: {
@@ -101,25 +121,23 @@ export default async function updatePassword(currentState: any, formData: FormDa
     const hashedPassword = await hashPassword(newPassword);
 
     // Update the user's password in the database
-    await updateUserPassword(currentState.userId, hashedPassword);
+    await updateUserPassword(prevState.data.id, hashedPassword);
 
     // Return success response
     return {
-      ...currentState,
+      ...prevState,
       success: true,
       message: "Password successfully updated.",
-      errors: null
+      errors: undefined
     };
   } catch (error) {
     console.error(error);
 
     // Return generic server error
     return {
-      ...currentState,
+      ...prevState,
       success: false,
-      errors: {
-        server: { errors: ["An unexpected error occurred"] },
-      },
+      error: 'An unexpected error occurre',
     };
   }
 }

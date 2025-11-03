@@ -1,12 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Bars3Icon, HomeIcon, UsersIcon } from '@heroicons/react/24/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 import useAuth from '@/app/auth/hooks/auth-hook'
 import logoutAction from '@/app/auth/actions/logout-action'
+import AppLogo from '../components/app-logo'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
@@ -46,13 +48,7 @@ export default function LayoutAdmin({
                 <Bars3Icon aria-hidden="true" className="size-6" />
               </button>
               <Link href="/" className="flex ms-2 md:me-24 items-center">
-                <img
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                  width={32}
-                  height={32}
-                  alt="Logo"
-                  className="w-8 h-8 me-3"
-                />
+                <AppLogo className="w-8 h-8 me-3" />
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   Next-Auth
                 </span>
@@ -62,14 +58,25 @@ export default function LayoutAdmin({
             <Menu as="div" className="relative flex items-center ms-3">
               <MenuButton className="flex text-sm bg-gray-800 rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                 <span className="sr-only">Open user menu</span>
-                <img
-                  alt={user.name || 'User'}
-                  src={
-                    user.image ||
-                    'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User')
-                  }
-                  className="size-8 rounded-full outline -outline-offset-1 outline-white/10"
-                />
+                {user.image ? (
+                  <Image
+                    alt={user.name || 'User'}
+                    src={user.image}
+                    width={32} // size-8 = 32px
+                    height={32}
+                    className="size-8 rounded-full outline -outline-offset-1 outline-white/10 object-cover"
+                  />
+                ) : (
+                  <div className="size-8 rounded-full outline -outline-offset-1 outline-white/10 bg-indigo-500 flex items-center justify-center text-white font-semibold">
+                    {user.name
+                      ? user.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .toUpperCase()
+                      : 'U'}
+                  </div>
+                )}
               </MenuButton>
 
               <MenuItems

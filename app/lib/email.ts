@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import nodemailer from "nodemailer";
 
 interface EmailOptions {

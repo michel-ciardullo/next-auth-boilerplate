@@ -1,6 +1,6 @@
 'use server'
 
-import { z } from 'zod'
+import { treeifyError, z } from 'zod'
 import { forbidden, unauthorized } from 'next/navigation'
 
 import { Role } from '@/app/generated/prisma'
@@ -14,7 +14,29 @@ const updateUserSchema = z.object({
   role: z.enum(['USER', 'ADMIN']),
 })
 
-export async function updateUserAction(prevState: any, formData: FormData) {
+type UpdateUserState = {
+  data?: {
+    id: string
+    name: string
+    email: string
+    role: string
+  },
+  success?: boolean
+  errors?: {
+    properties?: {
+      name?: { errors: string[] }
+      email?: { errors: string[] }
+      role?: { errors: string[] }
+    }
+  }
+  message?: string
+  error?: string
+}
+
+export async function updateUserAction(
+  prevState: UpdateUserState,
+  formData: FormData
+): Promise<UpdateUserState> {
   // User authentication and role verification
   const session = await verifySession()
 
@@ -30,34 +52,53 @@ export async function updateUserAction(prevState: any, formData: FormData) {
     forbidden()
   }
 
+  // Extract and validate fields from the form
+  const name = formData.get('name') as string
+  const email = formData.get('email') as string
+  const role = (formData.get('role') as string) || Role.USER
+
+  const id = prevState?.data?.id
+  if (!id) {
+    return {
+      ...prevState,
+      success: false,
+      error: 'User ID is missing. Cannot update user.',
+    }
+  }
+
   try {
-    // Validate and parse the form data using Zod
-    const parsed = updateUserSchema.parse({
-      name: formData.get('name'),
-      email: formData.get('email'),
-      role: formData.get('role'),
-    })
+    // Zod validation
+    const validatedFields = await updateUserSchema.safeParseAsync({ name, email, role })
+    
+    // Return early if the form data is invalid
+    if (!validatedFields.success) {
+      const errors = treeifyError(validatedFields.error)
+      return {
+        ...prevState,
+        success: false,
+        data: { id, name, email, role },
+        errors,
+      };
+    }
 
     // Update the user in the database
-    await updateUser(prevState.id, {
-      name: parsed.name,
-      email: parsed.email,
-      role: parsed.role === 'ADMIN' ? Role.ADMIN : Role.USER,
+    await updateUser(id, {
+      name,
+      email,
+      role: role === 'ADMIN' ? Role.ADMIN : Role.USER,
     })
 
     // Return the updated state with success flag
-    return {
-      ...prevState,
-      ...parsed,
-      success: true
-    }
-  } catch (err: any) {
+    return { success: true }
+  } catch (err) {
     console.error('❌ updateUser error:', err)
 
     // Return error details for display in the UI
     return {
       ...prevState,
-      error: err?.message || 'Failed to update user',
+      success: false,
+      data: { id, name, email, role },
+      error: 'Internal server error'
     }
   }
 }

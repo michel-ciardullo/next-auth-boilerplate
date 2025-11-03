@@ -3,9 +3,21 @@
 import prisma from "@/app/lib/prisma";
 
 export async function getSessionById(id: string) {
-  return await prisma.session.findUnique({
+  return prisma.session.findUnique({
     where: { id },
-    include: { user: true },
+    select: {
+      id: true,
+      expiresAt: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          role: true,
+        },
+      },
+    },
   });
 }
 

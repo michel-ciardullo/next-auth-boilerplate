@@ -1,15 +1,12 @@
 import { createContext } from "react";
+import { User } from "@/app/generated/prisma";
 
 interface AuthContextType {
-  user: any | null;
+  user?: User;
   status: string;
-  update: (data?: any) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  user: null,
+  user: undefined,
   status: 'loading',
-  update: async (data?: any) => {
-
-  }
 });

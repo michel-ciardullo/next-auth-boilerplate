@@ -135,7 +135,7 @@ export default function TermsOfServicePage() {
             6. Limitation of Liability
           </h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6">
-            The service is provided "as is" without warranties of any kind. We are not 
+            The service is provided {'"'}as is{'"'} without warranties of any kind. We are not 
             responsible for damages or losses resulting from your use or inability to 
             use our services, except where prohibited by law.
           </p>

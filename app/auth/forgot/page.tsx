@@ -3,8 +3,11 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import Input from "@/app/components/ui/form/input";
-import Label from "@/app/components/ui/form/label";
+import FormLabel from "@/app/components/form-label";
+import FormInput from "@/app/components/form-input";
+import FormErrors from "@/app/components/form-errors";
+
+import AppLogo from "@/app/components/app-logo";
 import forgetAction from "../actions/forgot-action";
 
 export default function ForgotPassword() {
@@ -13,11 +16,7 @@ export default function ForgotPassword() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Your Company"
-          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
+        <AppLogo className="mx-auto h-10 w-auto" />
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           Reset your password
         </h2>
@@ -26,17 +25,16 @@ export default function ForgotPassword() {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form action={formAction} className="space-y-6">
           <div>
-            <Label htmlFor="email">Email address</Label>
-            <div className="mt-2">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                defaultValue={state?.email}
-                required
-              />
-              {state?.errors?.properties?.email?.errors.length && <small className="text-red-600 dark:text-red-400 block mt-1">{state?.errors?.properties.email.errors[0]}</small>}
-            </div>
+            <FormLabel htmlFor="email">Email address</FormLabel>
+            <FormInput
+              id="email"
+              name="email"
+              type="email"
+              defaultValue={state?.data?.email}
+              className="mt-2"
+              required
+            />
+            <FormErrors errors={state?.errors?.properties?.email?.errors} />
           </div>
 
           {state?.success && state.message && (

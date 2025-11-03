@@ -2,8 +2,9 @@
 
 import { useActionState } from 'react'
 
-import Label from '@/app/components/ui/form/label'
-import Input from '@/app/components/ui/form/input'
+import FormLabel from '@/app/components/form-label'
+import FormInput from '@/app/components/form-input'
+import FormErrors from '@/app/components/form-errors'
 import updatePassword from '../actions/update-password'
 
 interface UpdatePasswordFormProps {
@@ -12,8 +13,7 @@ interface UpdatePasswordFormProps {
 
 export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) {
   const [state, formAction, isPending] = useActionState(updatePassword, {
-    userId,
-    success: false
+    data: { id: userId }
   })
 
   return (
@@ -28,17 +28,25 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
         <div className="px-4 py-6 sm:p-8">
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-            {state?.errors?.server?.errors && state.errors.server.errors.length > 0 && (
+            {state?.message && (
               <div className="col-span-full">
-                <span className="text-sm/6 text-red-600 dark:text-red-400 mr-auto">
-                  {state.errors.server.errors[0]}
+                <span className="text-sm/6 text-gray-600 dark:text-gray-400">
+                  {state?.message}
+                </span>
+              </div>
+            )}
+
+            {state?.error && (
+              <div className="col-span-full">
+                <span className="text-sm/6 text-red-600 dark:text-red-400">
+                  {state?.error}
                 </span>
               </div>
             )}
 
             <div className="col-span-full">
-              <Label htmlFor="currentPassword">Current Password</Label>
-              <Input
+              <FormLabel htmlFor="currentPassword">Current Password</FormLabel>
+              <FormInput
                 id="currentPassword"
                 name="currentPassword"
                 type="password"
@@ -46,12 +54,12 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
                 className="mt-2"
                 required
               />
-              {state?.errors?.properties?.currentPassword?.errors.length && <small className="text-red-600 dark:text-red-400 block mt-1">{state?.errors?.properties.currentPassword.errors[0]}</small>}
+              <FormErrors errors={state?.errors?.properties?.currentPassword?.errors} />
             </div>
 
             <div className="col-span-full">
-              <Label htmlFor="newPassword">New Password</Label>
-              <Input
+              <FormLabel htmlFor="newPassword">New Password</FormLabel>
+              <FormInput
                 id="newPassword"
                 name="newPassword"
                 type="password"
@@ -59,12 +67,12 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
                 className="mt-2"
                 required
               />
-              {state?.errors?.properties?.newPassword?.errors.length && <small className="text-red-600 dark:text-red-400 block mt-1">{state?.errors?.properties.newPassword.errors[0]}</small>}
+              <FormErrors errors={state?.errors?.properties?.newPassword?.errors} />
             </div>
 
             <div className="col-span-full">
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
-              <Input
+              <FormLabel htmlFor="confirmPassword">Confirm New Password</FormLabel>
+              <FormInput
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
@@ -72,7 +80,7 @@ export default function UpdatePasswordForm({ userId }: UpdatePasswordFormProps) 
                 className="mt-2"
                 required
               />
-              {state?.errors?.properties?.confirmPassword?.errors.length && <small className="text-red-600 dark:text-red-400 block mt-1">{state?.errors?.properties.confirmPassword.errors[0]}</small>}
+              <FormErrors errors={state?.errors?.properties?.confirmPassword?.errors} />
             </div>
 
           </div>

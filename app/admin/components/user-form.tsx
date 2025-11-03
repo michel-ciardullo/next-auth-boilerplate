@@ -1,32 +1,48 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect } from 'react'
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { PlusIcon, PencilIcon } from '@heroicons/react/24/solid'
 
-import Label from '@/app/components/ui/form/label'
-import Input from '@/app/components/ui/form/input'
-import { Role, User } from '@/app/generated/prisma'
+import FormLabel from '@/app/components/form-label'
+import FormInput from '@/app/components/form-input'
+import FormSelect from '@/app/components/form-select'
+import FormErrors from '@/app/components/form-errors'
+import { Role } from '@/app/generated/prisma'
 
-import { updateUserAction } from '../actions/update-user'
-import { createUserAction } from '../actions/add-user'
+interface UserFormProps {
+  state: {
+    data?: {
+      id?: string
+      name?: string
+      email?: string
+      role?: string
+    }
+    success?: boolean
+    error?: string
+    errors?: {
+      properties?: {
+        name?: { errors: string[] }
+        email?: { errors: string[] }
+        role?: { errors: string[] }
+      }
+    }
+  } | null
+  action: (formData: FormData) => void
+  isPending: boolean
+}
 
-export default function UserForm({
-  data,
-}: {
-  data?: User | null,
-}) {
-  const [state, formAction, isPending] = useActionState(data?.id ? updateUserAction : createUserAction, data)
+export default function UserForm({ state, action, isPending }: UserFormProps) {
   const router = useRouter()
 
   useEffect(() => {
     if (state?.success) {
       router.push('/admin/users')
     }
-  }, [state?.success])
+  }, [state?.success, router])
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={action} className="space-y-6">
 
       {state?.error && (
         <p className="text-sm text-red-600 dark:text-red-400">
@@ -35,8 +51,8 @@ export default function UserForm({
       )}
 
       <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
+        <FormLabel htmlFor="name">Name</FormLabel>
+        <FormInput
           type="text"
           name="name"
           id="name"
@@ -44,34 +60,37 @@ export default function UserForm({
           placeholder="John Doe"
           className="mt-1"
           autoFocus
-          defaultValue={state?.name || ''}
+          defaultValue={state?.data?.name || ''}
         />
+        <FormErrors errors={state?.errors?.properties?.name?.errors} />
       </div>
 
       <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
+        <FormLabel htmlFor="email">Email</FormLabel>
+        <FormInput
           type="email"
           name="email"
           id="email"
           required
           placeholder="user@example.com"
           className="mt-1"
-          defaultValue={state?.email || ''}
+          defaultValue={state?.data?.email || ''}
         />
+        <FormErrors errors={state?.errors?.properties?.email?.errors} />
       </div>
 
       <div>
-        <Label htmlFor="role">Role</Label>
-        <select
+        <FormLabel htmlFor="role">Role</FormLabel>
+        <FormSelect
+          defaultValue={state?.data?.role || Role.USER}
+          options={[
+            { value: Role.USER, label: 'User' },
+            { value: Role.ADMIN, label: 'Admin' },
+          ]}
           name="role"
           id="role"
-          defaultValue={state?.role || Role.USER}
-          className="mt-1 w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="USER">User</option>
-          <option value="ADMIN">Admin</option>
-        </select>
+        />
+        <FormErrors errors={state?.errors?.properties?.role?.errors} />
       </div>
 
       <div className="flex justify-end">
@@ -80,10 +99,11 @@ export default function UserForm({
           disabled={isPending}
           className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500 disabled:opacity-50"
         >
-          {!state?.id && <PlusIcon className="h-5 w-5" />}
+          {!state?.data?.id && <PlusIcon className="h-5 w-5" />}
+          {state?.data?.id && <PencilIcon className="h-5 w-5" />}
           {isPending
-            ? `${state?.id ? 'Updating' : 'Creating'}...'`
-            : `${state?.id ? 'Update' : 'Create'} User`}
+            ? `${state?.data?.id ? 'Updating' : 'Creating'}...'`
+            : `${state?.data?.id ? 'Update' : 'Create'} User`}
         </button>
       </div>
     </form>

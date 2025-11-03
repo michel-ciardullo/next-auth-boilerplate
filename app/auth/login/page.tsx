@@ -3,9 +3,12 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import Input from "@/app/components/ui/form/input";
-import Label from "@/app/components/ui/form/label";
+import FormLabel from "@/app/components/form-label";
+import FormInput from "@/app/components/form-input";
+
+import AppLogo from "@/app/components/app-logo";
 import loginAction from "../actions/login-action";
+import FormErrors from "@/app/components/form-errors";
 
 export default function Login() {
   const [state, formAction, pending] = useActionState(loginAction, null)
@@ -13,11 +16,7 @@ export default function Login() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Your Company"
-          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
+        <AppLogo className="mx-auto h-10 w-auto" />
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
           Sign in to your account
         </h2>
@@ -27,25 +26,22 @@ export default function Login() {
         <form action={formAction} className="space-y-6">
 
           <div>
-            <Label htmlFor="email">Email address</Label>
-            <div className="mt-2">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                defaultValue={state?.email}
-              />
-              {state?.errors?.properties?.email?.errors?.length && (
-                <small className="text-red-600 dark:text-red-400 block mt-1">{state.errors.properties.email.errors[0]}</small>
-              )}
-            </div>
+            <FormLabel htmlFor="email">Email address</FormLabel>
+            <FormInput
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              defaultValue={state?.data.email}
+              className="mt-2"
+            />
+            <FormErrors errors={state?.errors?.properties?.email?.errors} />
           </div>
 
           <div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <FormLabel htmlFor="password">Password</FormLabel>
               <div className="text-sm">
                 {/* 🔑 Forgot Password Link */}
                 <Link
@@ -57,16 +53,14 @@ export default function Login() {
               </div>
             </div>
             <div className="mt-2">
-              <Input
+              <FormInput
                 id="password"
                 name="password"
                 type="password"
                 required
                 autoComplete="current-password"
               />
-              {state?.errors?.properties?.password?.errors?.length && (
-                <small className="text-red-600 dark:text-red-400 block mt-1">{state.errors.properties.password.errors[0]}</small>
-              )}
+              <FormErrors errors={state?.errors?.properties?.password?.errors} />
             </div>
           </div>
 
@@ -82,7 +76,6 @@ export default function Login() {
                     type="checkbox"
                     aria-label="Remember me"
                     className="absolute inset-0 appearance-none focus:outline-hidden cursor-pointer"
-                    defaultChecked={state?.remember}
                   />
                 </div>
               </div>

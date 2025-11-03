@@ -1,11 +1,7 @@
 import React, { InputHTMLAttributes } from "react";
 import { classNames } from "@/utils/functions";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-
-}
-
-export default function Input(props: InputProps) {
+export default function FormInput(props: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}

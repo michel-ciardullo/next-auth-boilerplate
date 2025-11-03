@@ -23,18 +23,14 @@ export async function getDashboardStats() {
   }
 
   // Fetch dashboard statistics concurrently
-  const [userCount, orderCount, revenueSum, sessionCount] = await Promise.all([
+  const [userCount, sessionCount] = await Promise.all([
     prisma.user.count(),    // Count total users
-    0,                      // Placeholder for total orders (replace with prisma.order.count())
-    0,                      // Placeholder for total revenue (replace with prisma.order.aggregate({ _sum: { total: true } }))
     prisma.session.count(), // Count total sessions
   ])
 
   // Return aggregated statistics for the admin dashboard
   return {
     totalUsers: userCount,
-    totalOrders: orderCount,
-    totalRevenue: 0, // Placeholder value for revenue
     totalSessions: sessionCount,
   }
 }
