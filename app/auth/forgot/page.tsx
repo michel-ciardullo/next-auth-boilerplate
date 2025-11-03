@@ -3,9 +3,9 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import { forgetAction } from "@/features/auth";
-import Input from "@/components/ui/form/input";
-import Label from "@/components/ui/form/label";
+import Input from "@/app/components/ui/form/input";
+import Label from "@/app/components/ui/form/label";
+import forgetAction from "../actions/forgot-action";
 
 export default function ForgotPassword() {
   const [state, formAction, isPending] = useActionState(forgetAction, null);

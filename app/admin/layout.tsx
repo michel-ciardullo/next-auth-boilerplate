@@ -3,8 +3,10 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Bars3Icon, HomeIcon, UsersIcon } from '@heroicons/react/24/solid'
-import { logoutAction, useAuth } from '@/features/auth'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+
+import useAuth from '@/app/auth/hooks/auth-hook'
+import logoutAction from '@/app/auth/actions/logout-action'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
@@ -23,6 +25,9 @@ export default function LayoutAdmin({
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user } = useAuth()
+
+  if (!user)
+    return null
 
   return (
     <>

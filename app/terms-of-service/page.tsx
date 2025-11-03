@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { ShieldCheckIcon } from '@heroicons/react/24/solid'
 
-import Footer from '@/components/footer'
-import LandingNavbar from '@/components/landing-navbar'
+import Footer from '@/app/components/footer'
+import LandingNavbar from '@/app/components/landing-navbar'
 
 export const metadata = {
   title: "Terms of Service | Next Auth",

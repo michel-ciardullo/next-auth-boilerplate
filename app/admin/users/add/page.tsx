@@ -1,5 +1,5 @@
-import { ButtonBack } from '@/features/admin'
-import { UserForm } from '@/features/admin'
+import ButtonBack from "@/app/admin/components/button-back";
+import UserForm from "@/app/admin/components/user-form";
 
 export default function AdminUserAdd() {
   return (

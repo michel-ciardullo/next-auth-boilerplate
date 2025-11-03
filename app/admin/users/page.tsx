@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { UserTable, UserTableSkeleton } from '@/features/admin'
+
+import UserTableSkeleton from '@/app/admin/components/user-table-skeleton'
+import UserTable from '@/app/admin/components/user-table'
 
 export default async function AdminUsers({
   searchParams

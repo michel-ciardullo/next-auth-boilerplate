@@ -1,7 +1,7 @@
 'use server'
 
-import { getUserById } from '@/features/user'
-import { ButtonBack } from '@/features/admin'
+import { getUserById } from '@/app/user'
+import ButtonBack from '@/app/admin/components/button-back'
 
 export default async function AdminUserShow({
   params

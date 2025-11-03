@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 
-import Footer from '@/components/footer'
-import LandingNavbar from '@/components/landing-navbar'
+import Footer from '@/app/components/footer'
+import LandingNavbar from '@/app/components/landing-navbar'
 
 export default function Home() {
   return (

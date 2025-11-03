@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { verifyAction } from "@/features/auth";
+import verifyAction from "../actions/verify-action";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();

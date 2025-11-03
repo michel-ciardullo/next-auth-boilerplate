@@ -3,9 +3,9 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import Input from "@/components/ui/form/input";
-import Label from "@/components/ui/form/label";
-import { registerAction } from "@/features/auth";
+import Input from "@/app/components/ui/form/input";
+import Label from "@/app/components/ui/form/label";
+import registerAction from "../actions/register-action";
 
 export default function Register() {
   const [state, formAction, isPending] = useActionState(registerAction, null);

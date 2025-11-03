@@ -3,9 +3,9 @@
 import { useActionState } from "react";
 import Link from "next/link";
 
-import Input from "@/components/ui/form/input";
-import Label from "@/components/ui/form/label";
-import { loginAction } from "@/features/auth";
+import Input from "@/app/components/ui/form/input";
+import Label from "@/app/components/ui/form/label";
+import loginAction from "../actions/login-action";
 
 export default function Login() {
   const [state, formAction, pending] = useActionState(loginAction, null)

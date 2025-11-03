@@ -1,13 +1,6 @@
 'use server'
 
-import { getDashboardStats } from "@/features/admin/actions/get-dashboard-stats"
-
-const stats = [
-  { title: 'Utilisateurs', value: 1204 },
-  { title: 'Commandes', value: 89 },
-  { title: 'Revenus', value: '12 430 €' },
-  { title: 'Taux de conversion', value: '4.6%' },
-]
+import { getDashboardStats } from "./actions/get-dashboard-stats"
 
 const activities = [
   { user: 'Alice', action: 'created a new product', time: '3 min ago' },

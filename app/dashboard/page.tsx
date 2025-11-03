@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 
-import Navbar from '@/components/navbar'
-import Header from '@/components/header'
-import Footer from '@/components/footer'
-import { useAuth } from '@/features/auth'
+import Navbar from '@/app/components/navbar'
+import Header from '@/app/components/header'
+import Footer from '@/app/components/footer'
+import useAuth from '../auth/hooks/auth-hook'
 
 export default function Dashboard() {
   const { user } = useAuth()

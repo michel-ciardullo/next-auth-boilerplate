@@ -1,9 +1,9 @@
 'use server'
 
-import Navbar from '@/components/navbar'
-import Header from '@/components/header'
-import Footer from '@/components/footer'
-import { getUser } from '@/features/auth/dal/auth-dal'
+import Navbar from '@/app/components/navbar'
+import Header from '@/app/components/header'
+import Footer from '@/app/components/footer'
+import { getUser } from '@/app/auth/dal/auth-dal'
 
 export default async function Profile() {
   const user = (await getUser())!
