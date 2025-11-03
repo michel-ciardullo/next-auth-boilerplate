@@ -17,24 +17,24 @@ export default async function UserTable({ page }: { page: number }) {
   return (
     <>
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left">
-        <thead className="bg-gray-50 dark:bg-gray-800">
+        <thead className="">
           <tr>
-            <th className="px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            <th className="px-4 sm:px-0 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
               Name
             </th>
-            <th className="px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
               Role
             </th>
-            <th className="px-6 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
               Status
             </th>
-            <th className="px-6 py-3"></th>
+            <th className="px-4 py-3"></th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
           {users.map((user) => (
             <tr key={user.id}>
-              <th scope="row" className="flex items-center px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+              <th scope="row" className="min-w-[200px] px-4 sm:pl-0 flex items-center py-4 whitespace-nowrap text-gray-900 dark:text-white">
                 <img
                   alt={user.name || 'User'}
                   src={
@@ -43,13 +43,13 @@ export default async function UserTable({ page }: { page: number }) {
                   }
                   className="w-10 h-10 rounded-full"
                 />
-                <div className="ps-3">
+                <div className="ps-3 flex-shrink-0">
                   <div className="text-base font-semibold">{user.name}</div>
                   <div className="font-normal text-gray-500 dark:text-gray-400">{user.email}</div>
                 </div>  
               </th>
-              <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{user.role}</td>
-              <td className="px-6 py-4">
+              <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">{user.role}</td>
+              <td className="px-4 py-4">
                 <span
                   className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                     user.emailVerifiedAt
@@ -60,7 +60,7 @@ export default async function UserTable({ page }: { page: number }) {
                   {user.emailVerifiedAt ? 'Active' : 'Pending'}
                 </span>
               </td>
-              <td className="px-6 py-4">
+              <td className="px-4 sm:pr-0 py-4">
                 <div className="flex gap-x-3 justify-end">
                   <Link
                     href={`/admin/users/${user.id}`}

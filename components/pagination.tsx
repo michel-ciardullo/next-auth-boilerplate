@@ -14,7 +14,21 @@ export function Pagination({ page, total, perPage }: PaginationProps) {
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 dark:border-white/10 bg-white dark:bg-transparent px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between border-t border-gray-200 dark:border-white/10 bg-white dark:bg-transparent px-4 py-3 sm:px-0">
+      <div className="flex flex-1 justify-between md:hidden">
+        <Link
+          href={`?page=${Math.max(page - 1, 1)}`}
+          className="relative inline-flex items-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/10"
+        >
+          Previous
+        </Link>
+        <Link
+          href={`?page=${Math.min(page + 1, totalPages)}`}
+          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/10"
+        >
+          Next
+        </Link>
+      </div>
       <div className="hidden md:flex md:flex-1 md:items-center md:justify-between">
         <p className="text-sm text-gray-700 dark:text-gray-300">
           Showing <span className="font-medium">{(page - 1) * perPage + 1}</span> to{' '}
